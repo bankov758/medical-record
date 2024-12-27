@@ -44,13 +44,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(User User, long id) {
+    public User updateUser(User user, long id) {
         return this.userRepository.findById(id)
-                .map(User1 -> {
-                    //mapper.mapUserUpdateDtoToUser(User, User1);
-                    return this.userRepository.save(User1);
+                .map(user1 -> {
+                    mapper.map(user, user1);
+                    return this.userRepository.save(user1);
                 }).orElseGet(() ->
-                        this.userRepository.save(User)
+                        this.userRepository.save(user)
                 );
     }
 

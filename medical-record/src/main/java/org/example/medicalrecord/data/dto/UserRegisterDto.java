@@ -15,6 +15,8 @@ public class UserRegisterDto {
 
     private String lastName;
 
+    private String egn;
+
     private String username;
 
     private String password;

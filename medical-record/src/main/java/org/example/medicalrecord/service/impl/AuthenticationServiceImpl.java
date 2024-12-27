@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import org.example.medicalrecord.data.dto.UserLoginDto;
 import org.example.medicalrecord.data.dto.UserLoginResponseDto;
 import org.example.medicalrecord.data.dto.UserRegisterDto;
+import org.example.medicalrecord.data.entity.Patient;
 import org.example.medicalrecord.data.entity.Role;
 import org.example.medicalrecord.data.entity.User;
 import org.example.medicalrecord.data.enums.Roles;
 import org.example.medicalrecord.repository.RoleRepository;
 import org.example.medicalrecord.service.AuthenticationService;
+import org.example.medicalrecord.service.PatientService;
 import org.example.medicalrecord.service.TokenService;
 import org.example.medicalrecord.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -40,17 +42,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private UserService userService;
 
+    private PatientService patientService;
+
     @Override
     public User registerUser(UserRegisterDto userRegisterDto) {
-        User user = mapper.map(userRegisterDto, User.class);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Patient patient = mapper.map(userRegisterDto, Patient.class);
+        patient.setPassword(passwordEncoder.encode(patient.getPassword()));
         Role userRole = roleRepository.findByAuthority(Roles.PATIENT).get();
 
         Set<Role> authorities = new HashSet<>();
         authorities.add(userRole);
-        user.setAuthorities(authorities);
+        patient.setAuthorities(authorities);
 
-        return userService.createUser(user);
+        return patientService.createPatient(patient);
     }
 
     @Override
