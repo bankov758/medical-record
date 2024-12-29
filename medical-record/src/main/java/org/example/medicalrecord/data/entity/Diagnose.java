@@ -1,5 +1,6 @@
 package org.example.medicalrecord.data.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,6 +14,7 @@ import lombok.Setter;
 @Entity
 public class Diagnose extends BaseEntity {
 
+    @Column(nullable = false)
     private String diagnoseName;
 
 }
