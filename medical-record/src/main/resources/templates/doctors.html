@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark">
+<head>
+    <script th:src="@{/js/color-modes.js}"></script>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title th:text="${pageTitle != null ? pageTitle : 'Album example · Bootstrap v5.3'}">
+        Album example · Bootstrap v5.3
+    </title>
+
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .b-example-divider {
+            width: 100%;
+            height: 3rem;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1),
+            inset 0 .125em .5em rgba(0, 0, 0, .15);
+        }
+
+        .b-example-vr {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+        }
+
+        .bi {
+            vertical-align: -.125em;
+            fill: currentColor;
+        }
+
+        .nav-scroller {
+            position: relative;
+            z-index: 2;
+            height: 2.75rem;
+            overflow-y: hidden;
+        }
+
+        .nav-scroller .nav {
+            display: flex;
+            flex-wrap: nowrap;
+            padding-bottom: 1rem;
+            margin-top: -1px;
+            overflow-x: auto;
+            text-align: center;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .btn-bd-primary {
+            --bd-violet-bg: #712cf9;
+            --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+            --bs-btn-font-weight: 600;
+            --bs-btn-color: var(--bs-white);
+            --bs-btn-bg: var(--bd-violet-bg);
+            --bs-btn-border-color: var(--bd-violet-bg);
+            --bs-btn-hover-color: var(--bs-white);
+            --bs-btn-hover-bg: #6528e0;
+            --bs-btn-hover-border-color: #6528e0;
+            --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+            --bs-btn-active-color: var(--bs-btn-hover-color);
+            --bs-btn-active-bg: #5a23c8;
+            --bs-btn-active-border-color: #5a23c8;
+        }
+
+        .bd-mode-toggle {
+            z-index: 1500;
+        }
+
+        .bd-mode-toggle .dropdown-menu .active .bi {
+            display: block !important;
+        }
+    </style>
+</head>
+
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+</svg>
+
+<div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle">
+</div>
+
+<header th:replace="fragments :: header"></header>
+
+<main>
+    <section class="py-5 text-center container">
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="fw-light" th:text="${mainHeading != null ? mainHeading : 'Album example'}">
+                    Album example
+                </h1>
+                <p class="lead text-body-secondary"
+                   th:text="${introText != null ? introText : 'Something short and leading...'}">
+                    Something short and leading...
+                </p>
+                <p>
+                    <a th:href="@{/someUrl1}" class="btn btn-primary my-2">Main call to action</a>
+                    <a th:href="@{/someUrl2}" class="btn btn-secondary my-2">Secondary action</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <form class="row g-3">
+          <div class="col-md-4">
+            <label for="validationDefault01" class="form-label">First name</label>
+            <input type="text" class="form-control" id="validationDefault01" value="Mark" required>
+          </div>
+          <div class="col-md-4">
+            <label for="validationDefault02" class="form-label">Last name</label>
+            <input type="text" class="form-control" id="validationDefault02" value="Otto" required>
+          </div>
+          <div class="col-md-4">
+            <label for="validationDefaultUsername" class="form-label">Username</label>
+            <div class="input-group">
+              <span class="input-group-text" id="inputGroupPrepend2">@</span>
+              <input type="text" class="form-control" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" required>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="validationDefault03" class="form-label">City</label>
+            <input type="text" class="form-control" id="validationDefault03" required>
+          </div>
+          <div class="col-md-3">
+            <label for="validationDefault04" class="form-label">State</label>
+            <select class="form-select" id="validationDefault04" required>
+              <option selected disabled value="">Choose...</option>
+              <option>...</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="validationDefault05" class="form-label">Zip</label>
+            <input type="text" class="form-control" id="validationDefault05" required>
+          </div>
+          <div class="col-12">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="invalidCheck2" required>
+              <label class="form-check-label" for="invalidCheck2">
+                Agree to terms and conditions
+              </label>
+            </div>
+          </div>
+          <div class="col-12">
+            <button class="btn btn-primary" type="submit">Submit form</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+    <div class="album py-5 bg-body-tertiary">
+        <div class="container">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"
+                 th:if="${doctors != null}"
+                 th:each="doctor : ${doctors}">
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <svg class="bd-placeholder-img card-img-top"
+                             width="100%" height="225"
+                             xmlns="http://www.w3.org/2000/svg"
+                             role="img"
+                             aria-label="Placeholder: Thumbnail"
+                             preserveAspectRatio="xMidYMid slice"
+                             focusable="false">
+                            <title>Placeholder</title>
+                            <rect width="100%" height="100%" fill="#55595c"></rect>
+                        </svg>
+
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item" th:each="speciality : ${doctor.specialities}"
+                                    th:text="${speciality}">An item
+                                </li>
+                            </ul>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                </div>
+                                <small class="text-body-secondary">9 visits</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" th:if="${items == null}">
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="text-body-secondary py-5">
+    <div class="container">
+        <p class="float-end mb-1">
+            <a href="#">Back to top</a>
+        </p>
+    </div>
+</footer>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

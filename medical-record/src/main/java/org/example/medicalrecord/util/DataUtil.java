@@ -1,5 +1,6 @@
 package org.example.medicalrecord.util;
 
+import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
@@ -11,6 +12,8 @@ import java.util.stream.Stream;
 /**
  * Utility class for common data-related operations.
  */
+
+@Component
 public class DataUtil {
 
     /**

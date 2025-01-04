@@ -10,24 +10,23 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-public class IndexController {
+@RequestMapping("/doctors")
+public class DoctorController {
 
     private final DoctorService doctorService;
 
     private final ModelMapperUtil mapperUtil;
 
-    @GetMapping("/")
-    public String getIndex(Model model) {
-
-        List<DoctorViewModel> doctors = mapperUtil
-                .mapList(doctorService.getDoctors(), DoctorViewModel.class);
+    @GetMapping
+    public String getDoctors(Model model) {
+        List<DoctorViewModel> doctors = mapperUtil.mapList(doctorService.getDoctors(), DoctorViewModel.class);
         model.addAttribute("doctors", doctors);
-        return "/index";
+        return "doctors";
     }
-
 }
