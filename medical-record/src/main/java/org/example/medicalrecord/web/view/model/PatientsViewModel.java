@@ -1,26 +1,24 @@
-package org.example.medicalrecord.data.dto;
+package org.example.medicalrecord.web.view.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRegisterDto {
+public class PatientsViewModel {
 
     private String firstName;
 
     private String lastName;
 
-    private String egn;
-
     private String username;
 
-    private String password;
-
-    private String confirmPassword;
+    private Set<String> authorities;
 
 }

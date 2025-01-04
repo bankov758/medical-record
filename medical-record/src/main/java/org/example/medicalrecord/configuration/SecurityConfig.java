@@ -82,12 +82,22 @@ public class SecurityConfig {
 //    }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authz -> authz.requestMatchers("/recipes/**")
-                        .hasAuthority("DOCTOR").requestMatchers("/medicines/**")
-                        .hasAuthority("SELLER").requestMatchers(HttpMethod.GET, "/medicines")
-                        .hasAuthority("CUSTOMER").anyRequest().authenticated())
-//                .httpBasic(Customizer.withDefaults())
-                .formLogin(Customizer.withDefaults());
+        http.authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/css/**", "/js/**", "/assets/**").permitAll()
+                        .requestMatchers("/recipes/**").hasAuthority("DOCTOR")
+                        .requestMatchers("/medicines/**").hasAuthority("SELLER")
+                        .requestMatchers(HttpMethod.GET, "/medicines").hasAuthority("CUSTOMER")
+                        .requestMatchers("/auth/signup").permitAll()
+                        .requestMatchers("/").permitAll()
+                        .anyRequest().authenticated())
+                .formLogin(Customizer.withDefaults())
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .permitAll()
+                );
         return http.build();
     }
 
