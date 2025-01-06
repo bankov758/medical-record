@@ -1,11 +1,13 @@
 package org.example.medicalrecord.service.impl;
 
 import lombok.AllArgsConstructor;
+import org.example.medicalrecord.data.dto.PatientDto;
 import org.example.medicalrecord.data.entity.Patient;
 import org.example.medicalrecord.exceptions.EntityNotFoundException;
 import org.example.medicalrecord.repository.PatientRepository;
+import org.example.medicalrecord.service.DoctorService;
 import org.example.medicalrecord.service.PatientService;
-import org.modelmapper.ModelMapper;
+import org.example.medicalrecord.util.ModelMapperUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,18 +18,20 @@ public class PatientServiceImpl implements PatientService {
 
     private PatientRepository patientRepository;
 
-    private final ModelMapper mapper;
+    private DoctorService doctorService;
+
+    private final ModelMapperUtil mapperUtil;
 
     @Override
-    public List<Patient> getPatients() {
-        return patientRepository.findAll();
+    public List<PatientDto> getPatients() {
+        return mapperUtil.mapList(patientRepository.findAll(), PatientDto.class);
     }
 
     @Override
-    public Patient getPatient(long id) {
-        return patientRepository
-                .findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(Patient.class, "id", id));
+    public PatientDto getPatient(long id) {
+        return mapperUtil.getModelMapper().map(
+                patientRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Patient.class, "id", id)),
+                PatientDto.class);
     }
 
     @Override
@@ -36,14 +40,13 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Patient updatePatient(Patient patient) {
-        return this.patientRepository.findById(patient.getId())
-                .map(patient1 -> {
-                    mapper.map(patient, patient1);
-                    return this.patientRepository.save(patient1);
-                }).orElseGet(() ->
-                        this.patientRepository.save(patient)
-                );
+    public Patient updatePatient(PatientDto patientDto, long id) {
+        Patient patient = patientRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Patient.class, "id", id));
+        mapperUtil.getModelMapper().map(patientDto, patient);
+        if (patientDto.getGpId() != 0){
+            patient.setGp(doctorService.getDoctor(patientDto.getGpId()));
+        }
+        return patientRepository.save(patient);
     }
 
     @Override

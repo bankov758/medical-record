@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark">
 <head>
-    <script th:src="@{/js/color-modes.js}"></script>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -94,36 +92,28 @@
 
     <div class="album py-5 bg-body-tertiary">
         <div class="container">
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"
-                 th:if="${users != null}"
-                 th:each="user : ${users}">
-                <div class="col">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <div class="col" th:if="${patients != null}" th:each="patient : ${patients}">
                     <div class="card shadow-sm">
-                        <svg class="bd-placeholder-img card-img-top"
-                             width="100%" height="225"
-                             xmlns="http://www.w3.org/2000/svg"
-                             role="img"
-                             aria-label="Placeholder: Thumbnail"
-                             preserveAspectRatio="xMidYMid slice"
-                             focusable="false">
-                            <title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c"></rect>
-                        </svg>
-
+                        <img th:src="@{/assets/patient-icon.svg}"
+                             class="bd-placeholder-img rounded-circle mx-auto d-block"
+                             width="140"
+                             height="140"
+                             alt="Custom Icon" />
                         <div class="card-body">
-                            <h5 class="card-title" th:text="${user.firstName} + ' ' + ${user.lastName}"></h5>
-                            <h5 class="card-title" th:text="${user.egn}"></h5>
+                            <h5 class="card-title" th:text="${patient.firstName} + ' ' + ${patient.lastName}"></h5>
+                            <h5 class="card-title" th:text="${patient.egn}"></h5>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                    <a type="button" class="btn btn-sm btn-outline-secondary" th:href="@{'/patients/edit-patient/'+${patient.id}}">Edit</a>
                                 </div>
-                                <small class="text-body-secondary">9 visits</small>
+                                <small class="text-body-secondary" th:text="${patient.lastPaidMedicalInsurance}">9 visits</small>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" th:if="${items == null}">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" th:if="${patients == null}">
             </div>
         </div>
     </div>

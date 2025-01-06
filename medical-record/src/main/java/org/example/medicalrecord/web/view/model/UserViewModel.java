@@ -1,17 +1,18 @@
 package org.example.medicalrecord.web.view.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 
+@EqualsAndHashCode
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PatientsViewModel {
+@ToString
+public abstract class UserViewModel {
+
+    private long id;
 
     private String firstName;
 

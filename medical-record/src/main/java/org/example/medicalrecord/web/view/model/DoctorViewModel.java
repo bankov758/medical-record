@@ -1,28 +1,19 @@
 package org.example.medicalrecord.web.view.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 
+@EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DoctorViewModel {
+@ToString
+public class DoctorViewModel extends UserViewModel {
 
-    private String firstName;
-
-    private String lastName;
-
-    private String username;
-
-    private boolean isGp;
+    private Boolean isGp;
 
     private Set<String> specialities;
-
-    private Set<String> authorities;
 
 }

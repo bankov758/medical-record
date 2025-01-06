@@ -1,12 +1,16 @@
 package org.example.medicalrecord.util;
 
+import org.example.medicalrecord.data.dto.PatientDto;
+import org.example.medicalrecord.data.entity.Patient;
 import org.example.medicalrecord.data.entity.Speciality;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,16 +19,45 @@ public class ModelMapperUtil {
 
     @Bean
     public ModelMapper getModelMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+
         Converter<Speciality, String> someObjectToStringConverter =
                 context -> {
                     Speciality source = context.getSource();
                     return (source == null) ? null : source.getSpecialtyName();
                 };
 
-        ModelMapper mapper = new ModelMapper();
-        mapper.createTypeMap(Speciality.class, String.class)
+        Converter<LocalDate, Date> localDateToDateConverter =
+                context -> context.getSource() == null ? null
+                        : Date.from(context.getSource().atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+
+        modelMapper.createTypeMap(Speciality.class, String.class)
                 .setConverter(someObjectToStringConverter);
-        return mapper;
+
+        modelMapper.typeMap(PatientDto.class, Patient.class)
+                .addMappings(mapper -> {
+                    mapper.skip(Patient::setId);
+                    mapper.using(localDateToDateConverter).map(PatientDto::getLastPaidMedicalInsurance, Patient::setLastPaidMedicalInsurance);
+                });
+
+
+
+        Converter<Date, LocalDate> dateToLocalDateConverter = ctx -> {
+            Date source = ctx.getSource();
+            if (source == null) {
+                return null;
+            }
+            return source.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        };
+
+
+        modelMapper.typeMap(Patient.class, PatientDto.class)
+                .addMappings(mapper ->
+                        mapper.using(dateToLocalDateConverter).map(Patient::getLastPaidMedicalInsurance, PatientDto::setLastPaidMedicalInsurance)
+                );
+
+        return modelMapper;
     }
 
     @Bean

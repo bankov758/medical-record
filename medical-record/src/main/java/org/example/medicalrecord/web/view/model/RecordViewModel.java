@@ -1,7 +1,15 @@
 package org.example.medicalrecord.web.view.model;
 
+import lombok.*;
+
 import java.util.Date;
 
+@EqualsAndHashCode
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class RecordViewModel {
 
     private String doctor;

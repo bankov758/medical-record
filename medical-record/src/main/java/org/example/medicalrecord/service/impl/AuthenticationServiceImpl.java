@@ -1,7 +1,7 @@
 package org.example.medicalrecord.service.impl;
 
 import lombok.AllArgsConstructor;
-import org.example.medicalrecord.web.view.model.SignupViewModel;
+import org.example.medicalrecord.data.dto.UserSignupDto;
 import org.example.medicalrecord.data.entity.Patient;
 import org.example.medicalrecord.data.entity.Role;
 import org.example.medicalrecord.data.entity.User;
@@ -22,7 +22,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-    private final ModelMapperUtil mapper;
+    private final ModelMapperUtil mapperUtil;
 
     private PasswordEncoder passwordEncoder;
 
@@ -31,8 +31,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private PatientService patientService;
 
     @Override
-    public User registerUser(SignupViewModel signupViewModel) {
-        Patient patient = mapper.getModelMapper().map(signupViewModel, Patient.class);
+    public User registerUser(UserSignupDto userSignupDto) {
+        Patient patient = mapperUtil.getModelMapper().map(userSignupDto, Patient.class);
         patient.setPassword(passwordEncoder.encode(patient.getPassword()));
         Role userRole = roleRepository.findByAuthority(Roles.PATIENT).get();
 

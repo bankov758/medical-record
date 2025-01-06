@@ -8,6 +8,8 @@ public interface DoctorService {
 
     List<Doctor> getDoctors();
 
+    List<Doctor> getGps();
+
     Doctor getDoctor(long id);
 
     Doctor createDoctor(Doctor doctor);

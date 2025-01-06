@@ -1,9 +1,6 @@
 package org.example.medicalrecord.data.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,5 +20,8 @@ public class Patient extends User {
     private String egn;
 
     private Date lastPaidMedicalInsurance;
+
+    @ManyToOne
+    private Doctor gp;
 
 }

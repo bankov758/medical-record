@@ -1,10 +1,8 @@
 package org.example.medicalrecord.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,10 +18,15 @@ import java.util.Set;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Doctor extends User {
 
-    private boolean isGp;
+    @Column(name = "is_gp")
+    private Boolean isGp;
 
     @JsonManagedReference
     @ManyToMany
     private Set<Speciality> specialities;
+
+    @OneToMany(mappedBy = "gp")
+    @JsonIgnore
+    private Set<Patient> patients;
 
 }

@@ -5,7 +5,7 @@ import org.example.medicalrecord.data.entity.Doctor;
 import org.example.medicalrecord.exceptions.EntityNotFoundException;
 import org.example.medicalrecord.repository.DoctorRepository;
 import org.example.medicalrecord.service.DoctorService;
-import org.modelmapper.ModelMapper;
+import org.example.medicalrecord.util.ModelMapperUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,41 +14,46 @@ import java.util.List;
 @AllArgsConstructor
 public class DoctorServiceImpl implements DoctorService {
 
-    private DoctorRepository DoctorRepository;
+    private DoctorRepository doctorRepository;
 
-    private final ModelMapper mapper;
+    private final ModelMapperUtil mapperUtil;
 
     @Override
     public List<Doctor> getDoctors() {
-        return DoctorRepository.findAll();
+        return doctorRepository.findAll();
+    }
+
+    @Override
+    public List<Doctor> getGps() {
+        return doctorRepository.findAllByIsGpTrue();
     }
 
     @Override
     public Doctor getDoctor(long id) {
-        return DoctorRepository
+        return doctorRepository
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Doctor.class, "id", id));
     }
 
     @Override
     public Doctor createDoctor(Doctor doctor) {
-        return DoctorRepository.save(doctor);
+        return doctorRepository.save(doctor);
     }
 
     @Override
     public Doctor updateDoctor(Doctor doctor, long id) {
-        return this.DoctorRepository.findById(id)
+        return this.doctorRepository.findById(id)
                 .map(Doctor1 -> {
-                    mapper.map(doctor, Doctor1);
-                    return this.DoctorRepository.save(Doctor1);
+                    mapperUtil.getModelMapper().map(doctor, Doctor1);
+                    return this.doctorRepository.save(Doctor1);
                 }).orElseGet(() ->
-                        this.DoctorRepository.save(doctor)
+                        this.doctorRepository.save(doctor)
                 );
     }
 
     @Override
     public void deleteDoctor(long id) {
-        DoctorRepository.deleteById(id);
+        doctorRepository.deleteById(id);
     }
     
 }
