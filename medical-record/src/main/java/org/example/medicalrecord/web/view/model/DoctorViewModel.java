@@ -17,4 +17,8 @@ public class DoctorViewModel extends UserViewModel {
 
     private Set<SpecialityDto> specialities;
 
+    private Integer numberOfPatients;
+
+    private Integer numberOfVisits;
+
 }

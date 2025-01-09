@@ -29,4 +29,8 @@ public class Doctor extends User {
     @JsonIgnore
     private Set<Patient> patients;
 
+    @OneToMany(mappedBy = "doctor")
+    @JsonIgnore
+    private Set<Record> records;
+
 }

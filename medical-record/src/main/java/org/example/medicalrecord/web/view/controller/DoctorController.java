@@ -3,8 +3,10 @@ package org.example.medicalrecord.web.view.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.medicalrecord.data.dto.DoctorDto;
+import org.example.medicalrecord.data.dto.SpecialityDto;
 import org.example.medicalrecord.exceptions.EntityNotFoundException;
 import org.example.medicalrecord.service.DoctorService;
+import org.example.medicalrecord.service.SpecialityService;
 import org.example.medicalrecord.util.ModelMapperUtil;
 import org.example.medicalrecord.web.view.model.DoctorViewModel;
 import org.example.medicalrecord.web.view.model.SpecialityViewModel;
@@ -13,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
 
 @Controller
@@ -21,6 +24,8 @@ import java.util.List;
 public class DoctorController {
 
     private final DoctorService doctorService;
+
+    private final SpecialityService specialityService;
 
     private final ModelMapperUtil mapperUtil;
 
@@ -41,7 +46,14 @@ public class DoctorController {
 
     @PostMapping("/update/{id}")
     public String updateDoctor(@PathVariable Long id,
-                               @Valid @ModelAttribute("doctor") DoctorViewModel doctorViewModel) {
+                               @Valid @ModelAttribute("doctor") DoctorViewModel doctorViewModel,
+                               BindingResult errors,
+                               Model model) {
+        if (errors.hasErrors()) {
+            model.addAttribute("speciality", new SpecialityViewModel(id));
+            doctorViewModel.setSpecialities(new HashSet<>(mapperUtil.mapList(specialityService.getDoctorsSpecialities(id), SpecialityDto.class)));
+            return "doctor-profile";
+        }
         doctorService.updateDoctor(mapperUtil.getModelMapper().map(doctorViewModel, DoctorDto.class), id);
         return "redirect:/doctors";
     }
