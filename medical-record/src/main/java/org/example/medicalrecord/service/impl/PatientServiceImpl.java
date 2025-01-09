@@ -2,10 +2,11 @@ package org.example.medicalrecord.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.example.medicalrecord.data.dto.PatientDto;
+import org.example.medicalrecord.data.entity.Doctor;
 import org.example.medicalrecord.data.entity.Patient;
 import org.example.medicalrecord.exceptions.EntityNotFoundException;
+import org.example.medicalrecord.repository.DoctorRepository;
 import org.example.medicalrecord.repository.PatientRepository;
-import org.example.medicalrecord.service.DoctorService;
 import org.example.medicalrecord.service.PatientService;
 import org.example.medicalrecord.util.ModelMapperUtil;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class PatientServiceImpl implements PatientService {
 
     private PatientRepository patientRepository;
 
-    private DoctorService doctorService;
+    private DoctorRepository doctorRepository;
 
     private final ModelMapperUtil mapperUtil;
 
@@ -44,7 +45,8 @@ public class PatientServiceImpl implements PatientService {
         Patient patient = patientRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Patient.class, "id", id));
         mapperUtil.getModelMapper().map(patientDto, patient);
         if (patientDto.getGpId() != 0){
-            patient.setGp(doctorService.getDoctor(patientDto.getGpId()));
+            patient.setGp(doctorRepository.findById(patientDto.getGpId())
+                    .orElseThrow(() -> new EntityNotFoundException(Doctor.class, "id", patientDto.getGpId())));
         }
         return patientRepository.save(patient);
     }

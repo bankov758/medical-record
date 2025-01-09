@@ -32,7 +32,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public String register(@Valid @ModelAttribute("signupViewModel") SignupViewModel signupViewModel, BindingResult errors) {
+    public String register(@Valid @ModelAttribute("signupViewModel") SignupViewModel signupViewModel,
+                           BindingResult errors) {
         try {
             if (errors.hasErrors()) {
                 return "sign-up";

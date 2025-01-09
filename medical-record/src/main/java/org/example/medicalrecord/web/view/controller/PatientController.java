@@ -53,4 +53,11 @@ public class PatientController {
                 .map(patientViewModel, PatientDto.class), id);
         return "redirect:/patients";
     }
+
+    @GetMapping("/delete/{id}")
+    public String deletePatient(@PathVariable Long id) {
+        patientService.deletePatient(id);
+        return "redirect:/patients";
+    }
+
 }

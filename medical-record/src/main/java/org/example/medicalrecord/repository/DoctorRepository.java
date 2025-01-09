@@ -6,5 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
+
     List<Doctor> findAllByIsGpTrue();
+
+    boolean existsByIdAndSpecialitiesSpecialtyName(Long doctorId, String specialtyName);
+
+    boolean existsByIdAndSpecialitiesId(Long doctorId, Long specialtyId);
+
 }

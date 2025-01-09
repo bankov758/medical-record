@@ -1,6 +1,7 @@
 package org.example.medicalrecord.util;
 
 import org.example.medicalrecord.data.dto.PatientDto;
+import org.example.medicalrecord.data.dto.SpecialityDto;
 import org.example.medicalrecord.data.entity.Patient;
 import org.example.medicalrecord.data.entity.Speciality;
 import org.modelmapper.Converter;
@@ -21,27 +22,21 @@ public class ModelMapperUtil {
     public ModelMapper getModelMapper() {
         ModelMapper modelMapper = new ModelMapper();
 
-        Converter<Speciality, String> someObjectToStringConverter =
+        Converter<Speciality, SpecialityDto> someObjectToStringConverter =
                 context -> {
                     Speciality source = context.getSource();
-                    return (source == null) ? null : source.getSpecialtyName();
+                    return (source == null) ? null : new SpecialityDto(source.getId(), source.getSpecialtyName());
                 };
-
         Converter<LocalDate, Date> localDateToDateConverter =
                 context -> context.getSource() == null ? null
                         : Date.from(context.getSource().atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-
-        modelMapper.createTypeMap(Speciality.class, String.class)
-                .setConverter(someObjectToStringConverter);
-
+        modelMapper.createTypeMap(Speciality.class, SpecialityDto.class).setConverter(someObjectToStringConverter);
         modelMapper.typeMap(PatientDto.class, Patient.class)
                 .addMappings(mapper -> {
                     mapper.skip(Patient::setId);
                     mapper.using(localDateToDateConverter).map(PatientDto::getLastPaidMedicalInsurance, Patient::setLastPaidMedicalInsurance);
                 });
-
-
 
         Converter<Date, LocalDate> dateToLocalDateConverter = ctx -> {
             Date source = ctx.getSource();
@@ -50,7 +45,6 @@ public class ModelMapperUtil {
             }
             return source.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         };
-
 
         modelMapper.typeMap(Patient.class, PatientDto.class)
                 .addMappings(mapper ->

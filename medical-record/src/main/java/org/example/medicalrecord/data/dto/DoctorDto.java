@@ -1,7 +1,6 @@
-package org.example.medicalrecord.web.view.model;
+package org.example.medicalrecord.data.dto;
 
 import lombok.*;
-import org.example.medicalrecord.data.dto.SpecialityDto;
 
 import java.util.Set;
 
@@ -11,7 +10,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class DoctorViewModel extends UserViewModel {
+public class DoctorDto extends UserDto {
 
     private Boolean isGp;
 

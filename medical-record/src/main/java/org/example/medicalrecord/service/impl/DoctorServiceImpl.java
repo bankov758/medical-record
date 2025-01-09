@@ -1,9 +1,13 @@
 package org.example.medicalrecord.service.impl;
 
 import lombok.AllArgsConstructor;
+import org.example.medicalrecord.data.dto.DoctorDto;
+import org.example.medicalrecord.data.dto.SpecialityDto;
 import org.example.medicalrecord.data.entity.Doctor;
+import org.example.medicalrecord.data.entity.Speciality;
 import org.example.medicalrecord.exceptions.EntityNotFoundException;
 import org.example.medicalrecord.repository.DoctorRepository;
+import org.example.medicalrecord.repository.SpecialityRepository;
 import org.example.medicalrecord.service.DoctorService;
 import org.example.medicalrecord.util.ModelMapperUtil;
 import org.springframework.stereotype.Service;
@@ -16,39 +20,74 @@ public class DoctorServiceImpl implements DoctorService {
 
     private DoctorRepository doctorRepository;
 
+    private SpecialityRepository specialityRepository;
+
     private final ModelMapperUtil mapperUtil;
 
     @Override
-    public List<Doctor> getDoctors() {
-        return doctorRepository.findAll();
+    public List<DoctorDto> getDoctors() {
+        return mapperUtil.mapList(doctorRepository.findAll(), DoctorDto.class);
     }
 
     @Override
-    public List<Doctor> getGps() {
-        return doctorRepository.findAllByIsGpTrue();
+    public List<DoctorDto> getGps() {
+        return mapperUtil.mapList(doctorRepository.findAllByIsGpTrue(), DoctorDto.class);
     }
 
     @Override
-    public Doctor getDoctor(long id) {
-        return doctorRepository
-                .findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(Doctor.class, "id", id));
+    public DoctorDto getDoctor(long id) {
+        return mapperUtil.getModelMapper().map(fetchDoctor(id), DoctorDto.class);
+    }
+
+    private Doctor fetchDoctor(long id) {
+        return doctorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Doctor.class, "id", id));
     }
 
     @Override
-    public Doctor createDoctor(Doctor doctor) {
-        return doctorRepository.save(doctor);
+    public DoctorDto createDoctor(DoctorDto doctorDto) {
+        return mapperUtil.getModelMapper().map(
+                doctorRepository.save(mapperUtil.getModelMapper().map(doctorDto, Doctor.class)),
+                DoctorDto.class);
     }
 
     @Override
-    public Doctor updateDoctor(Doctor doctor, long id) {
-        return this.doctorRepository.findById(id)
-                .map(Doctor1 -> {
-                    mapperUtil.getModelMapper().map(doctor, Doctor1);
-                    return this.doctorRepository.save(Doctor1);
-                }).orElseGet(() ->
-                        this.doctorRepository.save(doctor)
-                );
+    public DoctorDto updateDoctor(DoctorDto doctorDto, long id) {
+        Doctor doctor = fetchDoctor(id);
+        mapperUtil.getModelMapper()
+                .typeMap(DoctorDto.class, Doctor.class)
+                .addMappings(mapper -> mapper.skip(Doctor::setSpecialities))
+                .map(doctorDto, doctor);
+        if (doctorDto.getSpecialities() != null && !doctorDto.getSpecialities().isEmpty()) {
+            for (SpecialityDto speciality : doctorDto.getSpecialities()) {
+                if (!doctorRepository.existsByIdAndSpecialitiesSpecialtyName(id, speciality.getSpecialtyName())) {
+                    Speciality newSpeciality = specialityRepository.findBySpecialtyName(speciality.getSpecialtyName())
+                            .orElseThrow(() -> new EntityNotFoundException(Doctor.class, "id", id));
+                    doctor.getSpecialities().add(newSpeciality);
+                }
+            }
+        }
+        return mapperUtil.getModelMapper().map(doctorRepository.save(doctor), DoctorDto.class);
+    }
+
+    @Override
+    public void addSpeciality(String speciality, long doctorId) throws EntityNotFoundException {
+        Doctor doctor = fetchDoctor(doctorId);
+        if (!doctorRepository.existsByIdAndSpecialitiesSpecialtyName(doctorId, speciality)) {
+            Speciality newSpeciality = specialityRepository.findBySpecialtyName(speciality)
+                    .orElseThrow(() -> new EntityNotFoundException(Speciality.class, "specialityName", speciality));
+            doctor.getSpecialities().add(newSpeciality);
+            doctorRepository.save(doctor);
+        }
+    }
+
+    @Override
+    public void removeSpeciality(long specialityId, long doctorId) {
+        Doctor doctor = fetchDoctor(doctorId);
+        if (doctorRepository.existsByIdAndSpecialitiesId(doctorId, specialityId)){
+            doctor.getSpecialities().remove(specialityRepository.findById(specialityId)
+                    .orElseThrow(() -> new EntityNotFoundException(Speciality.class, "id", specialityId)));
+            doctorRepository.save(doctor);
+        }
     }
 
     @Override

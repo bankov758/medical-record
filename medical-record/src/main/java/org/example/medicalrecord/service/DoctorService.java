@@ -1,20 +1,25 @@
 package org.example.medicalrecord.service;
 
-import org.example.medicalrecord.data.entity.Doctor;
+import org.example.medicalrecord.data.dto.DoctorDto;
+import org.example.medicalrecord.exceptions.EntityNotFoundException;
 
 import java.util.List;
 
 public interface DoctorService {
 
-    List<Doctor> getDoctors();
+    List<DoctorDto> getDoctors();
 
-    List<Doctor> getGps();
+    List<DoctorDto> getGps();
 
-    Doctor getDoctor(long id);
+    DoctorDto getDoctor(long id);
 
-    Doctor createDoctor(Doctor doctor);
+    DoctorDto createDoctor(DoctorDto doctorDto);
 
-    Doctor updateDoctor(Doctor doctor, long id);
+    DoctorDto updateDoctor(DoctorDto doctorDto, long id);
+
+    void addSpeciality(String speciality, long doctorId) throws EntityNotFoundException;
+
+    void removeSpeciality(long specialityId, long doctorId);
 
     void deleteDoctor(long id);
     
