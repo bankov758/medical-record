@@ -47,17 +47,13 @@
                         <div class="col-sm-6">
                             <label for="firstName" class="form-label">First name</label>
                             <input type="text" class="form-control" id="firstName" placeholder="" value="" required th:field="*{firstName}">
-                            <div class="invalid-feedback">
-                                Valid first name is required.
-                            </div>
+                            <span class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
                         </div>
 
                         <div class="col-sm-6">
                             <label for="lastName" class="form-label">Last name</label>
                             <input type="text" class="form-control" id="lastName" placeholder="" value="" required th:field="*{lastName}">
-                            <div class="invalid-feedback">
-                                Valid last name is required.
-                            </div>
+                            <span class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
                         </div>
 
                         <div class="col-12">
@@ -65,37 +61,29 @@
                             <div class="input-group has-validation">
                                 <span class="input-group-text">@</span>
                                 <input type="text" class="form-control" id="username" placeholder="Username" required th:field="*{username}">
-                                <div class="invalid-feedback">
-                                    Your username is required.
-                                </div>
+                                <span class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
                             </div>
                         </div>
 
                         <div class="col-12">
                             <label for="address" class="form-label">EGN</label>
                             <input type="text" class="form-control" id="address" placeholder="1234 Main St" required th:field="*{egn}">
-                            <div class="invalid-feedback">
-                                Please enter your EGN.
-                            </div>
+                            <span class="text-danger" th:if="${#fields.hasErrors('egn')}" th:errors="*{egn}"></span>
                         </div>
 
                         <div class="col-12">
                             <label for="address2" class="form-label">Last paid medical insurance date</label>
-                            <input type="date" class="form-control" id="address2" placeholder="YYYY-MM-DD" th:field="*{lastPaidMedicalInsurance}" required>
-                            <div class="invalid-feedback">
-                                Please provide a valid date of birth.
-                            </div>
+                            <input type="date" class="form-control" id="address2" placeholder="YYYY-MM-DD" th:field="*{lastPaidMedicalInsurance}">
+                            <span class="text-danger" th:if="${#fields.hasErrors('lastPaidMedicalInsurance')}" th:errors="*{lastPaidMedicalInsurance}"></span>
                         </div>
 
                         <div class="col-md-5">
                             <label for="country" class="form-label">GP</label>
                             <select class="form-select" id="country" required th:field="*{gpId}">
-                                <option value="">Choose...</option>
+                                <option value="">Choose GP...</option>
                                 <option th:each="gp : ${gps}" th:text="${gp.firstName} + ' ' + ${gp.lastName}" th:value="${gp.id}">United States</option>
                             </select>
-                            <div class="invalid-feedback">
-                                Please select a valid country.
-                            </div>
+                            <span class="text-danger" th:if="${#fields.hasErrors('gpId')}" th:errors="*{gpId}"></span>
                         </div>
                     </div>
 
