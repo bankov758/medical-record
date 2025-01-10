@@ -21,23 +21,27 @@ public class ModelMapperUtil {
     @Bean
     public ModelMapper getModelMapper() {
         ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setSkipNullEnabled(true);
 
+        //Speciality to SpecialityDto
         Converter<Speciality, SpecialityDto> someObjectToStringConverter =
                 context -> {
                     Speciality source = context.getSource();
                     return (source == null) ? null : new SpecialityDto(source.getId(), source.getSpecialtyName());
                 };
+        modelMapper.createTypeMap(Speciality.class, SpecialityDto.class).setConverter(someObjectToStringConverter);
+
+        //PatientDto to Patient
         Converter<LocalDate, Date> localDateToDateConverter =
                 context -> context.getSource() == null ? null
                         : Date.from(context.getSource().atStartOfDay(ZoneId.systemDefault()).toInstant());
-
-        modelMapper.createTypeMap(Speciality.class, SpecialityDto.class).setConverter(someObjectToStringConverter);
         modelMapper.typeMap(PatientDto.class, Patient.class)
                 .addMappings(mapper -> {
                     mapper.skip(Patient::setId);
                     mapper.using(localDateToDateConverter).map(PatientDto::getLastPaidMedicalInsurance, Patient::setLastPaidMedicalInsurance);
                 });
 
+        //Patient to PatientDto
         Converter<Date, LocalDate> dateToLocalDateConverter = ctx -> {
             Date source = ctx.getSource();
             if (source == null) {
@@ -45,7 +49,6 @@ public class ModelMapperUtil {
             }
             return source.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         };
-
         modelMapper.typeMap(Patient.class, PatientDto.class)
                 .addMappings(mapper ->
                         mapper.using(dateToLocalDateConverter).map(Patient::getLastPaidMedicalInsurance, PatientDto::setLastPaidMedicalInsurance)

@@ -1,6 +1,5 @@
 package org.example.medicalrecord.configuration;
 
-
 import org.example.medicalrecord.exceptions.AuthenticationFailureException;
 import org.example.medicalrecord.exceptions.DuplicateEntityException;
 import org.example.medicalrecord.exceptions.EntityNotFoundException;

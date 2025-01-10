@@ -94,21 +94,15 @@
                  th:each="doctor : ${doctors}">
                 <div class="col">
                     <div class="card shadow-sm">
-                        <svg class="bd-placeholder-img card-img-top"
-                             width="100%" height="225"
-                             xmlns="http://www.w3.org/2000/svg"
-                             role="img"
-                             aria-label="Placeholder: Thumbnail"
-                             preserveAspectRatio="xMidYMid slice"
-                             focusable="false">
-                            <title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c"></rect>
-                        </svg>
-
+                        <img th:src="@{/assets/doctor-icon.svg}"
+                             class="bd-placeholder-img rounded-circle mx-auto d-block"
+                             width="140"
+                             height="140"
+                             alt="Custom Icon" />
                         <div class="card-body">
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item" th:each="speciality : ${doctor.specialities}"
-                                    th:text="${speciality}">An item
+                                    th:text="${speciality.specialtyName}">An item
                                 </li>
                             </ul>
                             <div class="d-flex justify-content-between align-items-center">
@@ -121,7 +115,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" th:if="${items == null}">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" th:if="${doctors == null}">
             </div>
         </div>
     </div>

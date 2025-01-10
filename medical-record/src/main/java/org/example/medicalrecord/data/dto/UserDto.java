@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public abstract class UserDto {
+public class UserDto {
 
     private long id;
 
@@ -21,9 +21,5 @@ public abstract class UserDto {
     @NotBlank
     @Size(min = 3, max = 20, message="Last name must be between 3 and 20 characters")
     private String lastName;
-
-    @NotBlank
-    @Size(min = 3, max = 20, message="Last name must be between 3 and 20 characters")
-    private String username;
 
 }
