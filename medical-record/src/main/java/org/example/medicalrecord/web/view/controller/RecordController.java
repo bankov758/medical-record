@@ -43,7 +43,7 @@ public class RecordController {
         recordToBeCreated.setDoctorId(authService.getLoggedInUser().getId());
         model.addAttribute("record", recordToBeCreated);
         model.addAttribute("doctors", mapperUtil.mapList(doctorService.getDoctors(), RecordDoctorViewModel.class));
-        return "create-record";
+        return "record-create";
     }
 
     @PostMapping("/create")
@@ -53,14 +53,14 @@ public class RecordController {
         if (errors.hasErrors()) {
             record.setDoctorId(authService.getLoggedInUser().getId());
             model.addAttribute("doctors", mapperUtil.mapList(doctorService.getDoctors(), RecordDoctorViewModel.class));
-            return "create-record";
+            return "record-create";
         }
         try {
             recordService.createRecord(mapperUtil.getModelMapper().map(record, RecordDto.class));
             return "redirect:/records";
         } catch (EntityNotFoundException ex) {
             handleErrors(record, errors, model, ex);
-            return "create-record";
+            return "record-create";
         }
     }
 
@@ -76,7 +76,7 @@ public class RecordController {
     public String showEditDoctorForm(Model model, @PathVariable Long id) {
         model.addAttribute("record", mapperUtil.getModelMapper().map(recordService.getRecord(id), RecordViewModel.class));
         model.addAttribute("doctors", mapperUtil.mapList(doctorService.getDoctors(), RecordDoctorViewModel.class));
-        return "update-record";
+        return "record-update";
     }
 
     @PostMapping("/update/{id}")
@@ -86,14 +86,14 @@ public class RecordController {
                                Model model) {
         if (errors.hasErrors()) {
             model.addAttribute("doctors", mapperUtil.mapList(doctorService.getDoctors(), RecordDoctorViewModel.class));
-            return "update-record";
+            return "record-update";
         }
         try {
             recordService.updateRecord(mapperUtil.getModelMapper().map(record, RecordDto.class), id);
             return "redirect:/records/edit-record/" + id;
         } catch (EntityNotFoundException ex) {
             handleErrors(record, errors, model, ex);
-            return "update-record";
+            return "record-update";
         }
     }
 

@@ -70,7 +70,8 @@
             </div>
             <div class="col-md-7 col-lg-8">
                 <h4 class="mb-3">Doctor Information</h4>
-                <h3 class="mb-3" th:text="'Patients: ' + ${doctor.numberOfPatients}">Doctor Information</h3>
+                <h5 class="mb-3" th:text="'Patients: ' + ${doctor.numberOfPatients}">Doctor Information</h5>
+                <h5 class="mb-3" th:text="'Visits: ' + ${doctor.numberOfVisits}">Doctor Information</h5>
                 <form class="needs-validation" novalidate th:action="@{/doctors/update/{id}(id=${doctor.id})}"
                       th:object="${doctor}" method="post">
                     <div class="row g-3">
