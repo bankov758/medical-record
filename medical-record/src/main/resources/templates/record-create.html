@@ -47,37 +47,36 @@
                     <div class="row g-3">
                         <div class="col-sm-6">
                             <label for="firstName" class="form-label">Patient first name</label>
-                            <input type="text" class="form-control" id="firstName" placeholder="" value="" required th:field="*{patientFirstName}">
+                            <input type="text" class="form-control" id="firstName" placeholder="" value=""  th:field="*{patientFirstName}">
                             <span class="text-danger" th:if="${#fields.hasErrors('patientFirstName')}" th:errors="*{patientFirstName}"></span>
                         </div>
 
                         <div class="col-sm-6">
                             <label for="lastName" class="form-label">Patient last name</label>
-                            <input type="text" class="form-control" id="lastName" placeholder="" value="" required th:field="*{patientLastName}">
+                            <input type="text" class="form-control" id="lastName" placeholder="" value=""  th:field="*{patientLastName}">
                             <span class="text-danger" th:if="${#fields.hasErrors('patientLastName')}" th:errors="*{patientLastName}"></span>
                         </div>
 
                         <div class="col-12">
                             <label for="address" class="form-label">Patient EGN</label>
-                            <input type="text" class="form-control" id="address" placeholder="0349481128" required th:field="*{patientEgn}">
+                            <input type="text" class="form-control" id="address" placeholder="0349481128"  th:field="*{patientEgn}">
                             <span class="text-danger" th:if="${#fields.hasErrors('patientEgn')}" th:errors="*{patientEgn}"></span>
                         </div>
 
                         <div class="col-12">
                             <label for="address2" class="form-label">Visit date</label>
-                            <input type="date" class="form-control" id="address2" placeholder="YYYY-MM-DD" th:field="*{visitDate}" required>
+                            <input type="date" class="form-control" id="address2" placeholder="YYYY-MM-DD" th:field="*{visitDate}" >
                             <span class="text-danger" th:if="${#fields.hasErrors('visitDate')}" th:errors="*{visitDate}"></span>
                         </div>
 
                         <div class="col-md-5">
                             <label for="country" class="form-label">Doctor</label>
-                            <select class="form-select" id="country" required th:field="*{doctorId}"
-                                    th:disabled="${#authentication.authorities.?[authority == 'ADMIN'].size() < 1}">
+                            <select class="form-select" id="country"  th:field="*{doctorId}">
+<!--                                    th:disabled="${#authentication.authorities.?[authority == 'ROLE_ADMIN'].size() < 1}">-->
                                 <option value="">Choose a doctor...</option>
                                 <option th:each="doctor : ${doctors}"
                                         th:text="${doctor.firstName} + ' ' + ${doctor.lastName}"
-                                        th:value="${doctor.id}"
-                                        th:attr="selected=(${doctor.id} == ${#authentication.principal.id})">
+                                        th:value="${doctor.id}">
                                 </option>
                             </select>
                             <span class="text-danger" th:if="${#fields.hasErrors('doctorId')}" th:errors="*{doctorId}"></span>
@@ -91,7 +90,7 @@
                     <div class="row gy-3">
                         <div class="col-md-6">
                             <label for="cc-name" class="form-label">Diagnose name</label>
-                            <input type="text" class="form-control" id="cc-name" placeholder="" required th:field="*{diagnoseName}">
+                            <input type="text" class="form-control" id="cc-name" placeholder=""  th:field="*{diagnoseName}">
                             <span class="text-danger" th:if="${#fields.hasErrors('diagnoseName')}" th:errors="*{diagnoseName}"></span>
                         </div>
 

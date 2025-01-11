@@ -24,10 +24,10 @@ public class MedicalRecordApplication {
     @Bean
     public CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncode) {
         return args -> {
-            if (roleRepository.findByAuthority(Roles.ADMIN).isPresent()) return;
-            Role adminRole = roleRepository.save(new Role(Roles.ADMIN));
-            roleRepository.save(new Role(Roles.DOCTOR));
-            roleRepository.save(new Role(Roles.PATIENT));
+            if (roleRepository.findByAuthority(Roles.ROLE_ADMIN).isPresent()) return;
+            Role adminRole = roleRepository.save(new Role(Roles.ROLE_ADMIN));
+            roleRepository.save(new Role(Roles.ROLE_DOCTOR));
+            roleRepository.save(new Role(Roles.ROLE_PATIENT));
 
             Set<Role> roles = new HashSet<>();
             roles.add(adminRole);

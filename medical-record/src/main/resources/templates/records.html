@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      data-bs-theme="dark">
 <head>
     <script th:src="@{/js/color-modes.js}"></script>
     <meta charset="utf-8">
@@ -24,8 +27,11 @@
             <div class="col-lg-6 col-md-8 mx-auto">
                 <h1 class="fw-light"> Medical Records </h1>
                 <p>
-                    <a th:if="${#authentication.authorities.?[authority == 'ADMIN' || authority == 'DOCTOR'].size()} < 1"
-                     th:href="@{/records/create-record}" class="btn btn-primary my-2">New Record</a>
+                    <a sec:authorize="hasAnyAuthority('ROLE_DOCTOR', 'ROLE_ADMIN')"
+                       th:href="@{/records/create-record}"
+                       class="btn btn-primary my-2">
+                        New Record
+                    </a>
                 </p>
             </div>
         </div>

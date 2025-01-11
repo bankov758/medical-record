@@ -42,6 +42,7 @@ public class RecordController {
         RecordViewModel recordToBeCreated = new RecordViewModel();
         recordToBeCreated.setDoctorId(authService.getLoggedInUser().getId());
         model.addAttribute("record", recordToBeCreated);
+        model.addAttribute("loggedId", authService.getLoggedInUser().getId());
         model.addAttribute("doctors", mapperUtil.mapList(doctorService.getDoctors(), RecordDoctorViewModel.class));
         return "record-create";
     }

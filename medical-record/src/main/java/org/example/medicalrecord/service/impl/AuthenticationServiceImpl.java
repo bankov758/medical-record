@@ -47,7 +47,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public User registerUser(UserSignupDto userSignupDto) {
         Patient patient = mapperUtil.getModelMapper().map(userSignupDto, Patient.class);
         patient.setPassword(passwordEncoder.encode(patient.getPassword()));
-        Role userRole = roleRepository.findByAuthority(Roles.PATIENT).get();
+        Role userRole = roleRepository.findByAuthority(Roles.ROLE_PATIENT).get();
 
         Set<Role> authorities = new HashSet<>();
         authorities.add(userRole);

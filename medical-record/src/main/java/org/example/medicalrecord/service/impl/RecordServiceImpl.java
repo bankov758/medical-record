@@ -43,7 +43,7 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public List<RecordDto> getRecords() {
         UserDto loggedInUser = authenticationService.getLoggedInUser();
-        if (loggedInUser.getAuthorities().contains(Roles.DOCTOR.name()) || loggedInUser.getAuthorities().contains(Roles.ADMIN.name())) {
+        if (loggedInUser.getAuthorities().contains(Roles.ROLE_DOCTOR.name()) || loggedInUser.getAuthorities().contains(Roles.ROLE_ADMIN.name())) {
             return mapperUtil.mapList(recordRepository.findAll(), RecordDto.class);
         }
         return mapperUtil.mapList(recordRepository.findAllByPatientId(loggedInUser.getId()), RecordDto.class);
@@ -78,7 +78,7 @@ public class RecordServiceImpl implements RecordService {
     public RecordDto updateRecord(RecordDto recordDto, long id) {
         Record record = fetchRecord(id);
         UserDto loggedInUser = authenticationService.getLoggedInUser();
-        if (record.getDoctor().getId() != loggedInUser.getId() || loggedInUser.getAuthorities().contains(Roles.ADMIN.name())) {
+        if (record.getDoctor().getId() != loggedInUser.getId() || loggedInUser.getAuthorities().contains(Roles.ROLE_ADMIN.name())) {
             throw new AuthorizationFailureException("You are not authorized to update this record");
         }
         if (recordDto.getVisitDate() != null){
