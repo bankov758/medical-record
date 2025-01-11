@@ -1,9 +1,9 @@
-package org.example.medicalrecord.web.view.model;
+package org.example.medicalrecord.data.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 @EqualsAndHashCode
 @Getter
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class RecordViewModel {
+public class RecordDto {
 
     private long id;
 
@@ -47,9 +47,10 @@ public class RecordViewModel {
 
     @NotNull(message = "Visit date can not be null")
     @FutureOrPresent(message = "Visit date cannot be in the past.")
-    private LocalDate visitDate;
+    private Date visitDate;
 
-    private LocalDate startDate;
+    private Date startDate;
 
     private int leaveDays;
+
 }

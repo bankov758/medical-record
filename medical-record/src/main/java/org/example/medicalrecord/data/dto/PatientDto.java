@@ -1,6 +1,9 @@
 package org.example.medicalrecord.data.dto;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -12,10 +15,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @ToString
 public class PatientDto extends UserDto {
-
-    @NotBlank
-    @Size(min = 3, max = 20, message="Last name must be between 3 and 20 characters")
-    private String username;
 
     @NotBlank(message = "EGN can not be empty")
     @Pattern(

@@ -1,8 +1,6 @@
 package org.example.medicalrecord.data.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,14 +21,13 @@ public class Record extends BaseEntity {
     @ManyToOne(optional = false)
     private Patient patient;
 
-    @ManyToOne(optional = false)
+    @OneToOne(mappedBy = "record", cascade = CascadeType.PERSIST)
     private Diagnose diagnose;
 
-    private String receipt;
-
+    @Column(nullable = false)
     private Date visitDate;
 
-    @OneToOne
+    @OneToOne(mappedBy = "record", cascade = CascadeType.PERSIST)
     private SickLeave sickLeave;
 
 }

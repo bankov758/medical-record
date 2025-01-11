@@ -1,10 +1,8 @@
-package org.example.medicalrecord.data.dto;
+package org.example.medicalrecord.web.view.model;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-
-import java.util.Set;
 
 @EqualsAndHashCode
 @Getter
@@ -12,9 +10,9 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class UserDto {
+public class RecordDoctorViewModel {
 
-    private long id;
+    private Long id;
 
     @NotBlank
     @Size(min = 3, max = 20, message="First name must be between 3 and 20 characters")
@@ -23,11 +21,5 @@ public class UserDto {
     @NotBlank
     @Size(min = 3, max = 20, message="Last name must be between 3 and 20 characters")
     private String lastName;
-
-    @NotBlank
-    @Size(min = 3, max = 20, message="Username must be between 3 and 20 characters")
-    private String username;
-
-    private Set<String> authorities;
 
 }
