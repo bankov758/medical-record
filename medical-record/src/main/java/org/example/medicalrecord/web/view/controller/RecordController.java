@@ -13,10 +13,7 @@ import org.example.medicalrecord.web.view.model.RecordViewModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -44,7 +41,6 @@ public class RecordController {
     public String showCreateRecordForm(Model model) {
         RecordViewModel recordToBeCreated = new RecordViewModel();
         recordToBeCreated.setDoctorId(authService.getLoggedInUser().getId());
-        model.addAttribute("loggedInId", recordToBeCreated);
         model.addAttribute("record", recordToBeCreated);
         model.addAttribute("doctors", mapperUtil.mapList(doctorService.getDoctors(), RecordDoctorViewModel.class));
         return "create-record";
@@ -63,14 +59,48 @@ public class RecordController {
             recordService.createRecord(mapperUtil.getModelMapper().map(record, RecordDto.class));
             return "redirect:/records";
         } catch (EntityNotFoundException ex) {
-            String[] exceptionMessage = ex.getMessage().split(" ");
-            String fieldName = exceptionMessage[2];
-            errors.rejectValue(fieldName, "record_error", ex.getMessage());
-            record.setDoctorId(authService.getLoggedInUser().getId());
-            model.addAttribute("doctors", mapperUtil.mapList(doctorService.getDoctors(), RecordDoctorViewModel.class));
+            handleErrors(record, errors, model, ex);
             return "create-record";
         }
+    }
 
+    private void handleErrors(@ModelAttribute("record") @Valid RecordViewModel record, BindingResult errors, Model model, EntityNotFoundException ex) {
+        String[] exceptionMessage = ex.getMessage().split(" ");
+        String fieldName = exceptionMessage[2];
+        errors.rejectValue(fieldName, "record_error", ex.getMessage());
+        record.setDoctorId(authService.getLoggedInUser().getId());
+        model.addAttribute("doctors", mapperUtil.mapList(doctorService.getDoctors(), RecordDoctorViewModel.class));
+    }
+
+    @GetMapping("/edit-record/{id}")
+    public String showEditDoctorForm(Model model, @PathVariable Long id) {
+        model.addAttribute("record", mapperUtil.getModelMapper().map(recordService.getRecord(id), RecordViewModel.class));
+        model.addAttribute("doctors", mapperUtil.mapList(doctorService.getDoctors(), RecordDoctorViewModel.class));
+        return "update-record";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateRecord(@PathVariable Long id,
+                               @Valid @ModelAttribute("record") RecordViewModel record,
+                               BindingResult errors,
+                               Model model) {
+        if (errors.hasErrors()) {
+            model.addAttribute("doctors", mapperUtil.mapList(doctorService.getDoctors(), RecordDoctorViewModel.class));
+            return "update-record";
+        }
+        try {
+            recordService.updateRecord(mapperUtil.getModelMapper().map(record, RecordDto.class), id);
+            return "redirect:/records/edit-record/" + id;
+        } catch (EntityNotFoundException ex) {
+            handleErrors(record, errors, model, ex);
+            return "update-record";
+        }
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deletePatient(@PathVariable Long id) {
+        recordService.deleteRecord(id);
+        return "redirect:/records";
     }
 
 }

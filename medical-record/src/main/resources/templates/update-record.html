@@ -1,5 +1,6 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en" data-bs-theme="dark">
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="en" data-bs-theme="dark">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -41,36 +42,45 @@
 
         <div class="row g-5">
             <div class="col-md-7 col-lg-8">
-                <h4 class="mb-3">Patient Information</h4>
-                <form class="needs-validation" novalidate th:action="@{/records/create}" th:object="${record}" method="post">
+                <h4 class="mb-3">Record Information</h4>
+                <form class="needs-validation" novalidate th:action="@{/records/update/{id}(id=${record.id})}" th:object="${record}" method="post">
                     <div class="row g-3">
                         <div class="col-sm-6">
                             <label for="firstName" class="form-label">Patient first name</label>
                             <input type="text" class="form-control" id="firstName" placeholder="" value="" required th:field="*{patientFirstName}">
+                            <span class="text-danger" th:if="${#fields.hasErrors('patientFirstName')}" th:errors="*{patientFirstName}"></span>
                         </div>
 
                         <div class="col-sm-6">
                             <label for="lastName" class="form-label">Patient last name</label>
                             <input type="text" class="form-control" id="lastName" placeholder="" value="" required th:field="*{patientLastName}">
+                            <span class="text-danger" th:if="${#fields.hasErrors('patientLastName')}" th:errors="*{patientLastName}"></span>
                         </div>
 
                         <div class="col-12">
                             <label for="address" class="form-label">Patient EGN</label>
-                            <input type="text" class="form-control" id="address" placeholder="1234 Main St" required th:field="*{patientEgn}">
+                            <input type="text" class="form-control" id="address" placeholder="0349481128" required th:field="*{patientEgn}">
+                            <span class="text-danger" th:if="${#fields.hasErrors('patientEgn')}" th:errors="*{patientEgn}"></span>
                         </div>
 
                         <div class="col-12">
                             <label for="address2" class="form-label">Visit date</label>
-                            <input type="date" class="form-control" id="address2" placeholder="YYYY-MM-DD" th:field="*{visitDate}" required>
+                            <input type="date" class="form-control" id="address2" placeholder="2025-11-22" th:field="*{visitDate}">
+                            <span class="text-danger" th:if="${#fields.hasErrors('visitDate')}" th:errors="*{visitDate}"></span>
                         </div>
 
                         <div class="col-md-5">
                             <label for="country" class="form-label">Doctor</label>
-                            <select class="form-select" id="country" required th:field="*{doctorId}">
+                            <select class="form-select" id="country" required th:field="*{doctorId}"
+                                    th:disabled="${#authentication.authorities.?[authority == 'ADMIN'].size() < 1}">
                                 <option value="">Choose a doctor...</option>
                                 <option th:each="doctor : ${doctors}"
-                                        th:text="${doctor.firstName} + ' ' + ${doctor.lastName}" th:value="${doctor.id}">United States</option>
+                                        th:text="${doctor.firstName} + ' ' + ${doctor.lastName}"
+                                        th:value="${doctor.id}"
+                                        th:attr="selected=(${doctor.id} == ${#authentication.principal.id})">
+                                </option>
                             </select>
+                            <span class="text-danger" th:if="${#fields.hasErrors('doctorId')}" th:errors="*{doctorId}"></span>
                         </div>
                     </div>
 
@@ -82,11 +92,13 @@
                         <div class="col-md-6">
                             <label for="cc-name" class="form-label">Diagnose name</label>
                             <input type="text" class="form-control" id="cc-name" placeholder="" required th:field="*{diagnoseName}">
+                            <span class="text-danger" th:if="${#fields.hasErrors('diagnoseName')}" th:errors="*{diagnoseName}"></span>
                         </div>
 
                         <div class="input-group">
                             <span class="input-group-text">Receipt</span>
                             <textarea class="form-control" aria-label="With textarea" th:field="*{receipt}"></textarea>
+                            <span class="text-danger" th:if="${#fields.hasErrors('receipt')}" th:errors="*{receipt}"></span>
                         </div>
                     </div>
 
@@ -96,11 +108,13 @@
                     <div class="row gy-3">
                         <div class="col-md-6">
                             <label for="address3" class="form-label">Start date</label>
-                            <input type="date" class="form-control" id="address3" placeholder="YYYY-MM-DD" th:field="*{sickLeave.startDate}">
+                            <input type="date" class="form-control" id="address3" placeholder="YYYY-MM-DD" th:field="*{startDate}">
+                            <span class="text-danger" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></span>
                         </div>
                         <div class="col-md-6">
                             <label for="cc-number2" class="form-label">Number of leave days</label>
-                            <input type="text" class="form-control" id="cc-number2" placeholder="" th:field="*{sickLeave.leaveDays}">
+                            <input type="text" class="form-control" id="cc-number2" placeholder="" th:field="*{leaveDays}">
+                            <span class="text-danger" th:if="${#fields.hasErrors('leaveDays')}" th:errors="*{leaveDays}"></span>
                         </div>
                     </div>
 

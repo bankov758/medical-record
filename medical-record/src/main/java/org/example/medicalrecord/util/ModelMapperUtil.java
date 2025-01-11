@@ -66,6 +66,7 @@ public class ModelMapperUtil {
                 map(source.getPatient().getLastName(), destination.getPatientLastName());
                 map(source.getPatient().getEgn(), destination.getPatientEgn());
                 map(source.getDiagnose().getDiagnoseName(), destination.getDiagnoseName());
+                map(source.getDiagnose().getReceipt(), destination.getReceipt());
                 map(source.getSickLeave().getStartDate(), destination.getStartDate());
                 map(source.getSickLeave().getLeaveDays(), destination.getLeaveDays());
             }

@@ -1,13 +1,18 @@
 package org.example.medicalrecord.service.impl;
 
 import lombok.AllArgsConstructor;
+import org.example.medicalrecord.data.dto.DiagnoseDto;
 import org.example.medicalrecord.data.dto.RecordDto;
-import org.example.medicalrecord.data.entity.Diagnose;
+import org.example.medicalrecord.data.dto.SickLeaveDto;
 import org.example.medicalrecord.data.entity.Record;
-import org.example.medicalrecord.data.entity.SickLeave;
+import org.example.medicalrecord.data.entity.*;
 import org.example.medicalrecord.exceptions.EntityNotFoundException;
-import org.example.medicalrecord.repository.*;
+import org.example.medicalrecord.repository.DoctorRepository;
+import org.example.medicalrecord.repository.PatientRepository;
+import org.example.medicalrecord.repository.RecordRepository;
+import org.example.medicalrecord.service.DiagnoseService;
 import org.example.medicalrecord.service.RecordService;
+import org.example.medicalrecord.service.SickLeaveService;
 import org.example.medicalrecord.util.ModelMapperUtil;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +28,9 @@ public class RecordServiceImpl implements RecordService {
 
     private final PatientRepository patientRepository;
 
-    private final DiagnoseRepository diagnoseRepository;
+    private final DiagnoseService diagnoseService;
 
-    private final SickLeaveRepository sickleaveRepository;
+    private final SickLeaveService sickLeaveService;
 
     private final ModelMapperUtil mapperUtil;
 
@@ -46,10 +51,8 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public RecordDto createRecord(RecordDto recordDto) {
         Record record = mapperUtil.getModelMapper().map(recordDto, Record.class);
-        record.setDoctor(doctorRepository.findById(recordDto.getDoctorId())
-                .orElseThrow(() -> new EntityNotFoundException("Doctor wth doctorId " + recordDto.getDoctorId() + " was not found")));
-        record.setPatient(patientRepository.findByEgn(recordDto.getPatientEgn())
-                .orElseThrow(() -> new EntityNotFoundException("Patient wth patientEgn " + recordDto.getPatientEgn() + " was not found")));
+        record.setDoctor(fetchDoctor(recordDto));
+        record.setPatient(fetchPatient(recordDto));
 
         record.setDiagnose(new Diagnose(recordDto.getDiagnoseName(), recordDto.getReceipt(), record));
         if (recordDto.getStartDate() != null){
@@ -64,11 +67,13 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public RecordDto updateRecord(RecordDto recordDto, long id) {
         Record record = fetchRecord(id);
-        mapperUtil.getModelMapper()
-//                .typeMap(DoctorDto.class, Doctor.class)
-//                .addMappings(mapper -> mapper.skip(Doctor::setSpecialities))
-                .map(recordDto, record);
-
+        if (recordDto.getVisitDate() != null){
+            record.setVisitDate(recordDto.getVisitDate());
+        }
+        diagnoseService.updateDiagnose(new DiagnoseDto(recordDto.getDiagnoseName(), recordDto.getReceipt(), record), id);
+        sickLeaveService.updateSickLeave(new SickLeaveDto(recordDto.getStartDate(), recordDto.getLeaveDays(), record), id);
+        record.setDoctor(fetchDoctor(recordDto));
+        record.setPatient(fetchPatient(recordDto));
         return mapperUtil.getModelMapper().map(recordRepository.save(record), RecordDto.class);
     }
 
@@ -77,4 +82,13 @@ public class RecordServiceImpl implements RecordService {
         recordRepository.deleteById(id);
     }
 
+    private Doctor fetchDoctor(RecordDto recordDto) {
+        return doctorRepository.findById(recordDto.getDoctorId())
+                .orElseThrow(() -> new EntityNotFoundException("Doctor wth doctorId " + recordDto.getDoctorId() + " was not found"));
+    }
+
+    private Patient fetchPatient(RecordDto recordDto) {
+        return patientRepository.findByEgn(recordDto.getPatientEgn())
+                .orElseThrow(() -> new EntityNotFoundException("Patient wth patientEgn " + recordDto.getPatientEgn() + " was not found"));
+    }
 }

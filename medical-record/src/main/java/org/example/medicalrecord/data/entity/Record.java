@@ -21,13 +21,13 @@ public class Record extends BaseEntity {
     @ManyToOne(optional = false)
     private Patient patient;
 
-    @OneToOne(mappedBy = "record", cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "record", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private Diagnose diagnose;
 
     @Column(nullable = false)
     private Date visitDate;
 
-    @OneToOne(mappedBy = "record", cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "record", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private SickLeave sickLeave;
 
 }
