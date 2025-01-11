@@ -2,6 +2,7 @@ package org.example.medicalrecord.web.view.model;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -47,8 +48,10 @@ public class RecordViewModel {
 
     @NotNull(message = "Visit date can not be null")
     @FutureOrPresent(message = "Visit date cannot be in the past.")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate visitDate;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
 
     private int leaveDays;

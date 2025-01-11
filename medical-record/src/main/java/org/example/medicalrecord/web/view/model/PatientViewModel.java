@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -23,7 +24,7 @@ public class PatientViewModel extends UserViewModel {
     )
     private String egn;
 
-    //@DateTimeFormat(pattern = "mm-dd-yyyy")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull
     @PastOrPresent(message = "Date cannot be in the future.")
     private LocalDate lastPaidMedicalInsurance;

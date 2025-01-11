@@ -13,6 +13,7 @@ import org.example.medicalrecord.util.ModelMapperUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -26,7 +27,15 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public List<DoctorDto> getDoctors() {
-        return mapperUtil.mapList(doctorRepository.findAll(), DoctorDto.class);
+        return doctorRepository.findAll()
+                .stream()
+                .map(doctor -> {
+                    DoctorDto doctorDto = mapperUtil.getModelMapper().map(doctor, DoctorDto.class);
+                    doctorDto.setNumberOfVisits(doctorRepository.countByRecordsDoctorId(doctor.getId()));
+                    doctorDto.setNumberOfPatients(doctorRepository.countByPatientsGpId(doctor.getId()));
+                    return doctorDto;
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -36,7 +45,10 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public DoctorDto getDoctor(long id) {
-        return mapperUtil.getModelMapper().map(fetchDoctor(id), DoctorDto.class);
+        DoctorDto doctorDto = mapperUtil.getModelMapper().map(fetchDoctor(id), DoctorDto.class);
+        doctorDto.setNumberOfVisits(doctorRepository.countByRecordsDoctorId(id));
+        doctorDto.setNumberOfPatients(doctorRepository.countByPatientsGpId(id));
+        return doctorDto;
     }
 
     private Doctor fetchDoctor(long id) {

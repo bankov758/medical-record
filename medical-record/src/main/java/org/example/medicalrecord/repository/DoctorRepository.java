@@ -13,6 +13,8 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
     boolean existsByIdAndSpecialitiesId(Long doctorId, Long specialtyId);
 
-    int countByRecordsDoctorId(Long doctorId);
+    int countByRecordsDoctorId(long doctorId);
+
+    int countByPatientsGpId(long doctorId);
 
 }

@@ -16,4 +16,8 @@ public class DoctorDto extends UserDto {
 
     private Set<SpecialityDto> specialities;
 
+    private Integer numberOfVisits;
+
+    private Integer numberOfPatients;
+
 }
