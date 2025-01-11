@@ -24,8 +24,8 @@
             <div class="col-lg-6 col-md-8 mx-auto">
                 <h1 class="fw-light"> Medical Records </h1>
                 <p>
-                    <a th:href="@{/records/create-record}" class="btn btn-primary my-2">New Record</a>
-                    <a th:href="@{/someUrl2}" class="btn btn-secondary my-2">Secondary action</a>
+                    <a th:disabled="${#authentication.authorities.?[authority == 'ADMIN' || authority == 'DOCTOR'].size() < 1"
+                     th:href="@{/records/create-record}" class="btn btn-primary my-2">New Record</a>
                 </p>
             </div>
         </div>

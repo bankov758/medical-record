@@ -4,12 +4,16 @@ import lombok.AllArgsConstructor;
 import org.example.medicalrecord.data.dto.DiagnoseDto;
 import org.example.medicalrecord.data.dto.RecordDto;
 import org.example.medicalrecord.data.dto.SickLeaveDto;
+import org.example.medicalrecord.data.dto.UserDto;
 import org.example.medicalrecord.data.entity.Record;
 import org.example.medicalrecord.data.entity.*;
+import org.example.medicalrecord.data.enums.Roles;
+import org.example.medicalrecord.exceptions.AuthorizationFailureException;
 import org.example.medicalrecord.exceptions.EntityNotFoundException;
 import org.example.medicalrecord.repository.DoctorRepository;
 import org.example.medicalrecord.repository.PatientRepository;
 import org.example.medicalrecord.repository.RecordRepository;
+import org.example.medicalrecord.service.AuthenticationService;
 import org.example.medicalrecord.service.DiagnoseService;
 import org.example.medicalrecord.service.RecordService;
 import org.example.medicalrecord.service.SickLeaveService;
@@ -34,9 +38,15 @@ public class RecordServiceImpl implements RecordService {
 
     private final ModelMapperUtil mapperUtil;
 
+    private final AuthenticationService authenticationService;
+
     @Override
     public List<RecordDto> getRecords() {
-        return mapperUtil.mapList(recordRepository.findAll(), RecordDto.class);
+        UserDto loggedInUser = authenticationService.getLoggedInUser();
+        if (loggedInUser.getAuthorities().contains(Roles.DOCTOR.name()) || loggedInUser.getAuthorities().contains(Roles.ADMIN.name())) {
+            return mapperUtil.mapList(recordRepository.findAll(), RecordDto.class);
+        }
+        return mapperUtil.mapList(recordRepository.findAllByPatientId(loggedInUser.getId()), RecordDto.class);
     }
 
     @Override
@@ -67,6 +77,10 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public RecordDto updateRecord(RecordDto recordDto, long id) {
         Record record = fetchRecord(id);
+        UserDto loggedInUser = authenticationService.getLoggedInUser();
+        if (record.getDoctor().getId() != loggedInUser.getId() || loggedInUser.getAuthorities().contains(Roles.ADMIN.name())) {
+            throw new AuthorizationFailureException("You are not authorized to update this record");
+        }
         if (recordDto.getVisitDate() != null){
             record.setVisitDate(recordDto.getVisitDate());
         }

@@ -1,6 +1,6 @@
 package org.example.medicalrecord.configuration;
 
-import org.example.medicalrecord.exceptions.AuthenticationFailureException;
+import org.example.medicalrecord.exceptions.AuthorizationFailureException;
 import org.example.medicalrecord.exceptions.DuplicateEntityException;
 import org.example.medicalrecord.exceptions.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionConfig {
 
-    @ExceptionHandler(AuthenticationFailureException.class)
-    public ResponseEntity<String> handleUnauthorizedOperationException(AuthenticationFailureException ex) {
+    @ExceptionHandler(AuthorizationFailureException.class)
+    public ResponseEntity<String> handleUnauthorizedOperationException(AuthorizationFailureException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
 
