@@ -10,6 +10,8 @@ public interface RecordService {
 
     RecordDto getRecord(long id);
 
+    List<RecordDto> filterRecords(RecordDto recordDto);
+
     RecordDto createRecord(RecordDto recordDto);
 
     RecordDto updateRecord(RecordDto recordDto, long id);

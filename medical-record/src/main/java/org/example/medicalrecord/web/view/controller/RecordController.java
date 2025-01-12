@@ -9,6 +9,7 @@ import org.example.medicalrecord.service.DoctorService;
 import org.example.medicalrecord.service.RecordService;
 import org.example.medicalrecord.util.ModelMapperUtil;
 import org.example.medicalrecord.web.view.model.RecordDoctorViewModel;
+import org.example.medicalrecord.web.view.model.RecordSearchModel;
 import org.example.medicalrecord.web.view.model.RecordViewModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +34,16 @@ public class RecordController {
     @GetMapping
     public String getDoctors(Model model) {
         List<RecordViewModel> records = mapperUtil.mapList(recordService.getRecords(), RecordViewModel.class);
+        model.addAttribute("records", records);
+        model.addAttribute("searchRecord", new RecordSearchModel());
+        return "records";
+    }
+
+    @PostMapping("/filter")
+    public String getFilteredDoctors(Model model, @ModelAttribute("searchRecord") RecordViewModel searchRecord) {
+        List<RecordViewModel> records = mapperUtil.mapList(
+                recordService.filterRecords(mapperUtil.getModelMapper().map(searchRecord, RecordDto.class)),
+                RecordViewModel.class);
         model.addAttribute("records", records);
         return "records";
     }

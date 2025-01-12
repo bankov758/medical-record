@@ -23,7 +23,7 @@ public class DataUtil {
      * @return true if the string is null or empty, false otherwise
      */
     public static boolean isEmpty(String string) {
-        return string == null || string.isEmpty();
+        return string == null || string.isEmpty() || string.isBlank();
     }
 
     /**
