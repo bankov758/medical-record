@@ -37,7 +37,7 @@ public class RecordController {
     private final AuthenticationService authService;
 
     @GetMapping
-    public String getDoctors(Model model) {
+    public String getRecords(Model model) {
         List<RecordViewModel> records = mapperUtil.mapList(recordService.getRecords(), RecordViewModel.class);
         model.addAttribute("records", records);
         model.addAttribute("searchRecord", new RecordSearchModel());
@@ -45,7 +45,7 @@ public class RecordController {
     }
 
     @PostMapping("/filter")
-    public String getFilteredDoctors(Model model, @ModelAttribute("searchRecord") RecordSearchModel searchRecord) {
+    public String getFilteredRecords(Model model, @ModelAttribute("searchRecord") RecordSearchModel searchRecord) {
         Specification<Record> spec = RecordSpecification.filterRecords(
                 searchRecord.getDoctorFirstName(),
                 searchRecord.getDoctorLastName(),
@@ -97,7 +97,7 @@ public class RecordController {
     }
 
     @GetMapping("/edit-record/{id}")
-    public String showEditDoctorForm(Model model, @PathVariable Long id) {
+    public String showEditRecordForm(Model model, @PathVariable Long id) {
         model.addAttribute("record", mapperUtil.getModelMapper().map(recordService.getRecord(id), RecordViewModel.class));
         model.addAttribute("doctors", mapperUtil.mapList(doctorService.getDoctors(), RecordDoctorViewModel.class));
         return "record-update";
@@ -122,7 +122,7 @@ public class RecordController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deletePatient(@PathVariable Long id) {
+    public String deleteRecord(@PathVariable Long id) {
         recordService.deleteRecord(id);
         return "redirect:/records";
     }

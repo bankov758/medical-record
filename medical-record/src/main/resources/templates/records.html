@@ -35,52 +35,52 @@
                 </p>
             </div>
         </div>
+    </section>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form class="row g-3" th:action="@{/records/filter}" th:object="${searchRecord}" method="post">
+                    <div class="col-md-4">
+                        <label for="validationDefault01" class="form-label">Patient first name</label>
+                        <input type="text" class="form-control" id="validationDefault01" value="Mark" th:field="*{patientFirstName}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="validationDefault02" class="form-label">Patient last name</label>
+                        <input type="text" class="form-control" id="validationDefault02" value="Otto" th:field="*{patientLastName}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="validationDefault03" class="form-label">Patient EGN</label>
+                        <input type="text" class="form-control" id="validationDefault03" value="Mark" th:field="*{patientEgn}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="validationDefault04" class="form-label">Doctor first name</label>
+                        <input type="text" class="form-control" id="validationDefault04" value="Mark" th:field="*{doctorFirstName}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="validationDefault05" class="form-label">Doctor last name</label>
+                        <input type="text" class="form-control" id="validationDefault05" value="Otto" th:field="*{doctorLastName}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="validationDefault06" class="form-label">Visit date from</label>
+                        <input type="date" class="form-control" id="validationDefault06" value="Otto" th:field="*{visitDateFrom}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="validationDefault07" class="form-label">Visit date to</label>
+                        <input type="date" class="form-control" id="validationDefault07" value="Otto" th:field="*{visitDateTo}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="validationDefault08" class="form-label">Diagnose name</label>
+                        <input type="text" class="form-control" id="validationDefault08" value="Otto" th:field="*{diagnoseName}">
+                    </div>
 
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <form class="row g-3" th:action="@{/records/filter}" th:object="${searchRecord}" method="post">
-                        <div class="col-md-4">
-                            <label for="validationDefault01" class="form-label">Patient first name</label>
-                            <input type="text" class="form-control" id="validationDefault01" value="Mark" th:field="*{patientFirstName}">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="validationDefault02" class="form-label">Patient last name</label>
-                            <input type="text" class="form-control" id="validationDefault02" value="Otto" th:field="*{patientLastName}">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="validationDefault03" class="form-label">Patient EGN</label>
-                            <input type="text" class="form-control" id="validationDefault03" value="Mark" th:field="*{patientEgn}">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="validationDefault04" class="form-label">Doctor first name</label>
-                            <input type="text" class="form-control" id="validationDefault04" value="Mark" th:field="*{doctorFirstName}">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="validationDefault05" class="form-label">Doctor last name</label>
-                            <input type="text" class="form-control" id="validationDefault05" value="Otto" th:field="*{doctorLastName}">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="validationDefault06" class="form-label">Visit date from</label>
-                            <input type="date" class="form-control" id="validationDefault06" value="Otto" th:field="*{visitDateFrom}">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="validationDefault07" class="form-label">Visit date to</label>
-                            <input type="date" class="form-control" id="validationDefault07" value="Otto" th:field="*{visitDateTo}">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="validationDefault08" class="form-label">Diagnose name</label>
-                            <input type="text" class="form-control" id="validationDefault08" value="Otto" th:field="*{diagnoseName}">
-                        </div>
-
-                        <div class="col-12">
-                            <button class="btn btn-primary" type="submit">Search</button>
-                        </div>
-                    </form>
-                </div>
+                    <div class="col-12">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </form>
             </div>
         </div>
-    </section>
+    </div>
+    <br>
 
     <div class="album py-5 bg-body-tertiary">
         <div class="container">

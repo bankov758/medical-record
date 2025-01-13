@@ -19,22 +19,22 @@ public class RecordSpecification {
             List<Predicate> predicates = new ArrayList<>();
 
             if (DataUtil.isNotEmpty(doctorFirstName)) {
-                predicates.add(criteriaBuilder.like(root.get("doctor").get("firstName"), doctorFirstName));
+                predicates.add(criteriaBuilder.like(root.get("doctor").get("firstName"), "%" + doctorFirstName + "%"));
             }
             if (DataUtil.isNotEmpty(doctorLastName)) {
-                predicates.add(criteriaBuilder.like(root.get("doctor").get("lastName"), doctorLastName));
+                predicates.add(criteriaBuilder.like(root.get("doctor").get("lastName"), "%" + doctorLastName + "%"));
             }
             if (DataUtil.isNotEmpty(patientFirstName)) {
-                predicates.add(criteriaBuilder.like(root.get("patient").get("firstName"), patientFirstName));
+                predicates.add(criteriaBuilder.like(root.get("patient").get("firstName"), "%" + patientFirstName + "%"));
             }
             if (DataUtil.isNotEmpty(patientLastName)) {
-                predicates.add(criteriaBuilder.like(root.get("patient").get("lastName"), patientLastName));
+                predicates.add(criteriaBuilder.like(root.get("patient").get("lastName"), "%" + patientLastName + "%"));
             }
             if (DataUtil.isNotEmpty(patientEgn)) {
                 predicates.add(criteriaBuilder.equal(root.get("patient").get("egn"), patientEgn));
             }
             if (DataUtil.isNotEmpty(diagnoseName)) {
-                predicates.add(criteriaBuilder.like(root.get("diagnose").get("diagnoseName"), diagnoseName));
+                predicates.add(criteriaBuilder.like(root.get("diagnose").get("diagnoseName"), "%" + diagnoseName + "%"));
             }
             if (visitDateFrom != null) {
                 if (visitDateTo != null) {

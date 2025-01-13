@@ -22,70 +22,58 @@
     <section class="py-5 text-center container">
         <div class="row py-lg-5">
             <div class="col-lg-6 col-md-8 mx-auto">
-                <h1 class="fw-light" th:text="${mainHeading != null ? mainHeading : 'Album example'}">
-                    Album example
-                </h1>
-                <p class="lead text-body-secondary"
-                   th:text="${introText != null ? introText : 'Something short and leading...'}">
-                    Something short and leading...
-                </p>
-                <p>
-                    <a th:href="@{/someUrl1}" class="btn btn-primary my-2">Main call to action</a>
-                    <a th:href="@{/someUrl2}" class="btn btn-secondary my-2">Secondary action</a>
-                </p>
+                <h1 class="fw-light">Patients</h1>
             </div>
         </div>
     </section>
 
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-        <form class="row g-3">
-          <div class="col-md-4">
-            <label for="validationDefault01" class="form-label">First name</label>
-            <input type="text" class="form-control" id="validationDefault01" value="Mark" required>
-          </div>
-          <div class="col-md-4">
-            <label for="validationDefault02" class="form-label">Last name</label>
-            <input type="text" class="form-control" id="validationDefault02" value="Otto" required>
-          </div>
-          <div class="col-md-4">
-            <label for="validationDefaultUsername" class="form-label">Username</label>
-            <div class="input-group">
-              <span class="input-group-text" id="inputGroupPrepend2">@</span>
-              <input type="text" class="form-control" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" required>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form class="row g-3" th:action="@{/patients/filter}" th:object="${searchPatient}" method="post">
+                    <div class="col-md-4">
+                        <label for="validationDefault01" class="form-label">First name</label>
+                        <input type="text" class="form-control" id="validationDefault01" value="Mark"
+                               th:field="*{firstName}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="validationDefault02" class="form-label">Last name</label>
+                        <input type="text" class="form-control" id="validationDefault02" value="Otto"
+                               th:field="*{lastName}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="validationDefault03" class="form-label">EGN</label>
+                        <input type="text" class="form-control" id="validationDefault03" value="Mark" th:field="*{egn}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="validationDefault04" class="form-label">GP</label>
+                        <select class="form-control" id="validationDefault04" th:field="*{gpId}">
+                            <option value="">Choose GP...</option>
+                            <option th:each="gp : ${gps}" th:text="${gp.firstName} + ' ' + ${gp.lastName}"
+                                    th:value="${gp.id}">United States
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="validationDefault06" class="form-label">Last paid medical insurance date
+                            from</label>
+                        <input type="date" class="form-control" id="validationDefault06" value="Otto"
+                               th:field="*{lastPaidMedicalFrom}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="validationDefault07" class="form-label">Last paid medical insurance date to</label>
+                        <input type="date" class="form-control" id="validationDefault07" value="Otto"
+                               th:field="*{lastPaidMedicalTo}">
+                    </div>
+
+                    <div class="col-12">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </form>
             </div>
-          </div>
-          <div class="col-md-6">
-            <label for="validationDefault03" class="form-label">City</label>
-            <input type="text" class="form-control" id="validationDefault03" required>
-          </div>
-          <div class="col-md-3">
-            <label for="validationDefault04" class="form-label">State</label>
-            <select class="form-select" id="validationDefault04" required>
-              <option selected disabled value="">Choose...</option>
-              <option>...</option>
-            </select>
-          </div>
-          <div class="col-md-3">
-            <label for="validationDefault05" class="form-label">Zip</label>
-            <input type="text" class="form-control" id="validationDefault05" required>
-          </div>
-          <div class="col-12">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="invalidCheck2" required>
-              <label class="form-check-label" for="invalidCheck2">
-                Agree to terms and conditions
-              </label>
-            </div>
-          </div>
-          <div class="col-12">
-            <button class="btn btn-primary" type="submit">Submit form</button>
-          </div>
-        </form>
-      </div>
+        </div>
     </div>
-  </div>
+    <br>
 
     <div class="album py-5 bg-body-tertiary">
         <div class="container">
@@ -96,15 +84,17 @@
                              class="bd-placeholder-img rounded-circle mx-auto d-block"
                              width="140"
                              height="140"
-                             alt="Custom Icon" />
+                             alt="Custom Icon"/>
                         <div class="card-body">
                             <h5 class="card-title" th:text="${patient.firstName} + ' ' + ${patient.lastName}"></h5>
                             <h5 class="card-title" th:text="${patient.egn}"></h5>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
-                                    <a type="button" class="btn btn-sm btn-outline-secondary" th:href="@{'/patients/edit-patient/'+${patient.id}}">Edit</a>
+                                    <a type="button" class="btn btn-sm btn-outline-secondary"
+                                       th:href="@{'/patients/edit-patient/'+${patient.id}}">Edit</a>
                                 </div>
-                                <small class="text-body-secondary" th:text="${patient.lastPaidMedicalInsurance}">9 visits</small>
+                                <small class="text-body-secondary" th:text="${patient.lastPaidMedicalInsurance}">9
+                                    visits</small>
                             </div>
                         </div>
                     </div>

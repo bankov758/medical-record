@@ -9,9 +9,11 @@ import org.example.medicalrecord.repository.DoctorRepository;
 import org.example.medicalrecord.repository.PatientRepository;
 import org.example.medicalrecord.service.PatientService;
 import org.example.medicalrecord.util.ModelMapperUtil;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -33,6 +35,14 @@ public class PatientServiceImpl implements PatientService {
         return mapperUtil.getModelMapper().map(
                 patientRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Patient.class, "id", id)),
                 PatientDto.class);
+    }
+
+    @Override
+    public List<PatientDto> filterPatients(Specification<Patient> specification) {
+        List<Patient> result = patientRepository.findAll(specification);
+        return result.stream()
+                .map(patient -> mapperUtil.getModelMapper().map(patient, PatientDto.class))
+                .collect(Collectors.toList());
     }
 
     @Override
