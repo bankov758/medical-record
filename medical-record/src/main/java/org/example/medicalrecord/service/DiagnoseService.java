@@ -1,19 +1,18 @@
 package org.example.medicalrecord.service;
 
 import org.example.medicalrecord.data.dto.DiagnoseDto;
-import org.example.medicalrecord.data.entity.Diagnose;
 
 import java.util.List;
 
 public interface DiagnoseService {
 
-    List<Diagnose> getDiagnoses();
+    List<DiagnoseDto> getDiagnoses();
 
-    Diagnose getDiagnose(long id);
+    List<DiagnoseDto> getTopDiagnoses();
 
-    Diagnose createDiagnose(Diagnose diagnose);
+    DiagnoseDto getDiagnose(long id);
 
-    Diagnose updateDiagnose(DiagnoseDto diagnoseDto, long id);
+    DiagnoseDto updateDiagnose(DiagnoseDto diagnoseDto, long id);
 
     void deleteDiagnose(long id);
 

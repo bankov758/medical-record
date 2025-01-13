@@ -17,4 +17,16 @@ public class DiagnoseDto {
 
     private Record record;
 
+    private Long occurrenceCount;
+
+    public DiagnoseDto(String diagnoseName, String receipt, Record record) {
+        this.diagnoseName = diagnoseName;
+        this.receipt = receipt;
+        this.record = record;
+    }
+
+    public DiagnoseDto(Long occurrenceCount, String diagnoseName) {
+        this.occurrenceCount = occurrenceCount;
+        this.diagnoseName = diagnoseName;
+    }
 }

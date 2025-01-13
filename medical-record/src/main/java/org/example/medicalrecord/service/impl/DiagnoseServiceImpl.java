@@ -19,22 +19,22 @@ public class DiagnoseServiceImpl implements DiagnoseService {
     private final ModelMapperUtil mapperUtil;
 
     @Override
-    public List<Diagnose> getDiagnoses() {
-        return List.of();
+    public List<DiagnoseDto> getDiagnoses() {
+        return mapperUtil.mapList(diagnoseRepository.findAll(), DiagnoseDto.class);
     }
 
     @Override
-    public Diagnose getDiagnose(long id) {
-        return null;
+    public List<DiagnoseDto> getTopDiagnoses() {
+        return diagnoseRepository.findTop3DiagnosesByNameCount1();
     }
 
     @Override
-    public Diagnose createDiagnose(Diagnose diagnose) {
-        return null;
+    public DiagnoseDto getDiagnose(long id) {
+        return mapperUtil.getModelMapper().map(diagnoseRepository.findById(id).orElse(null), DiagnoseDto.class);
     }
 
     @Override
-    public Diagnose updateDiagnose(DiagnoseDto diagnoseDto, long id) {
+    public DiagnoseDto updateDiagnose(DiagnoseDto diagnoseDto, long id) {
         Diagnose diagnose = diagnoseRepository.findByRecordId(id);
         if (diagnose == null) {
             diagnose = new Diagnose();
@@ -42,11 +42,11 @@ public class DiagnoseServiceImpl implements DiagnoseService {
         diagnose.setDiagnoseName(diagnoseDto.getDiagnoseName());
         diagnose.setReceipt(diagnoseDto.getReceipt());
         diagnose.setRecord(diagnoseDto.getRecord());
-        return diagnoseRepository.save(diagnose);
+        return mapperUtil.getModelMapper().map(diagnoseRepository.save(diagnose), DiagnoseDto.class);
     }
 
     @Override
     public void deleteDiagnose(long id) {
-
+        diagnoseRepository.deleteById(id);
     }
 }
