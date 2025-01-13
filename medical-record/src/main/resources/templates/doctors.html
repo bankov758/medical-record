@@ -89,11 +89,10 @@
 
     <div class="album py-5 bg-body-tertiary">
         <div class="container">
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"
-                 th:if="${doctors != null}"
-                 th:each="doctor : ${doctors}">
-                <div class="col">
-                    <div class="card shadow-sm">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <div class="col" th:if="${doctors != null}"
+                     th:each="doctor : ${doctors}">
+                    <div class="card shadow-sm" >
                         <img th:src="@{/assets/doctor-icon.svg}"
                              class="bd-placeholder-img rounded-circle mx-auto d-block"
                              width="140"

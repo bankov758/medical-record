@@ -1,12 +1,9 @@
 package org.example.medicalrecord.web.view.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.medicalrecord.data.entity.Speciality;
 import org.example.medicalrecord.service.DoctorService;
 import org.example.medicalrecord.util.ModelMapperUtil;
 import org.example.medicalrecord.web.view.model.DoctorViewModel;
-import org.modelmapper.Converter;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +22,7 @@ public class IndexController {
     public String getIndex(Model model) {
 
         List<DoctorViewModel> doctors = mapperUtil
-                .mapList(doctorService.getDoctors(), DoctorViewModel.class);
+                .mapList(doctorService.getTopDoctors(), DoctorViewModel.class);
         model.addAttribute("doctors", doctors);
         return "/index";
     }

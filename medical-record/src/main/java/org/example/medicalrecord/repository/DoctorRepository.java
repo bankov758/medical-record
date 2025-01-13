@@ -9,11 +9,15 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
     List<Doctor> findAllByIsGpTrue();
 
+    List<Doctor> findTop3ByOrderByRecordsSickLeaveDesc();
+
     boolean existsByIdAndSpecialitiesSpecialtyName(Long doctorId, String specialtyName);
 
     boolean existsByIdAndSpecialitiesId(Long doctorId, Long specialtyId);
 
     int countByRecordsDoctorId(long doctorId);
+
+    int countByIdAndRecordsSickLeaveIsNotNull(long doctorId);
 
     int countByPatientsGpId(long doctorId);
 

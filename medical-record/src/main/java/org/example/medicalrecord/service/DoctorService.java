@@ -9,6 +9,8 @@ public interface DoctorService {
 
     List<DoctorDto> getDoctors();
 
+    List<DoctorDto> getTopDoctors();
+
     List<DoctorDto> getGps();
 
     DoctorDto getDoctor(long id);

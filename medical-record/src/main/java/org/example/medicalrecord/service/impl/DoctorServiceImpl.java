@@ -39,6 +39,20 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    public List<DoctorDto> getTopDoctors() {
+        return doctorRepository.findTop3ByOrderByRecordsSickLeaveDesc()
+                .stream()
+                .map(doctor -> {
+                    DoctorDto doctorDto = mapperUtil.getModelMapper().map(doctor, DoctorDto.class);
+                    doctorDto.setNumberOfVisits(doctorRepository.countByRecordsDoctorId(doctor.getId()));
+                    doctorDto.setNumberOfPatients(doctorRepository.countByPatientsGpId(doctor.getId()));
+                    doctorDto.setNumberOfSickLeaves(doctorRepository.countByIdAndRecordsSickLeaveIsNotNull(doctor.getId()));
+                    return doctorDto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<DoctorDto> getGps() {
         return mapperUtil.mapList(doctorRepository.findAllByIsGpTrue(), DoctorDto.class);
     }

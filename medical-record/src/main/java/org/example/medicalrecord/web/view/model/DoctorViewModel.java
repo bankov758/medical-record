@@ -21,4 +21,6 @@ public class DoctorViewModel extends UserViewModel {
 
     private Integer numberOfVisits;
 
+    private Integer numberOfSickLeaves = 0;
+
 }

@@ -20,4 +20,6 @@ public class DoctorDto extends UserDto {
 
     private Integer numberOfPatients;
 
+    private Integer numberOfSickLeaves;
+
 }
