@@ -6,7 +6,10 @@ import org.springframework.validation.FieldError;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Collection;
+import java.util.Date;
 import java.util.stream.Stream;
 
 /**
@@ -78,6 +81,13 @@ public class DataUtil {
      */
     public static Stream<String> getDefaultMessages(BindingResult errors) {
         return errors.getFieldErrors().stream().map(FieldError::getDefaultMessage);
+    }
+
+    public static Date localDateToDate(LocalDate localDate) {
+        if (localDate == null) {
+            return null;
+        }
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
 }

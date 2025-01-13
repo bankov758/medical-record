@@ -13,7 +13,6 @@ import org.example.medicalrecord.exceptions.EntityNotFoundException;
 import org.example.medicalrecord.repository.DoctorRepository;
 import org.example.medicalrecord.repository.PatientRepository;
 import org.example.medicalrecord.repository.RecordRepository;
-import org.example.medicalrecord.repository.RecordSpecification;
 import org.example.medicalrecord.service.AuthenticationService;
 import org.example.medicalrecord.service.DiagnoseService;
 import org.example.medicalrecord.service.RecordService;
@@ -58,16 +57,8 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public List<RecordDto> filterRecords(RecordDto recordDto) {
-        Specification<Record> spec = RecordSpecification.filterRecords(
-                recordDto.getDoctorFirstName(),
-                recordDto.getDoctorLastName(),
-                recordDto.getPatientFirstName(),
-                recordDto.getPatientLastName(),
-                recordDto.getPatientEgn(),
-                recordDto.getDiagnoseName(),
-                recordDto.getVisitDate());
-        List<Record> result = recordRepository.findAll(spec);
+    public List<RecordDto> filterRecords(Specification<Record> specification) {
+        List<Record> result = recordRepository.findAll(specification);
         return result.stream()
                 .map(record -> mapperUtil.getModelMapper().map(record, RecordDto.class))
                 .collect(Collectors.toList());
@@ -97,7 +88,7 @@ public class RecordServiceImpl implements RecordService {
     public RecordDto updateRecord(RecordDto recordDto, long id) {
         Record record = fetchRecord(id);
         UserDto loggedInUser = authenticationService.getLoggedInUser();
-        if (record.getDoctor().getId() != loggedInUser.getId() || loggedInUser.getAuthorities().contains(Roles.ROLE_ADMIN.name())) {
+        if (record.getDoctor().getId() != loggedInUser.getId() && !loggedInUser.getAuthorities().contains(Roles.ROLE_ADMIN.name())) {
             throw new AuthorizationFailureException("You are not authorized to update this record");
         }
         if (recordDto.getVisitDate() != null){

@@ -3,7 +3,9 @@ package org.example.medicalrecord.web.view.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.medicalrecord.data.dto.RecordDto;
+import org.example.medicalrecord.data.entity.Record;
 import org.example.medicalrecord.exceptions.EntityNotFoundException;
+import org.example.medicalrecord.repository.specification.RecordSpecification;
 import org.example.medicalrecord.service.AuthenticationService;
 import org.example.medicalrecord.service.DoctorService;
 import org.example.medicalrecord.service.RecordService;
@@ -11,12 +13,15 @@ import org.example.medicalrecord.util.ModelMapperUtil;
 import org.example.medicalrecord.web.view.model.RecordDoctorViewModel;
 import org.example.medicalrecord.web.view.model.RecordSearchModel;
 import org.example.medicalrecord.web.view.model.RecordViewModel;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.example.medicalrecord.util.DataUtil.localDateToDate;
 
 @Controller
 @RequiredArgsConstructor
@@ -40,10 +45,17 @@ public class RecordController {
     }
 
     @PostMapping("/filter")
-    public String getFilteredDoctors(Model model, @ModelAttribute("searchRecord") RecordViewModel searchRecord) {
-        List<RecordViewModel> records = mapperUtil.mapList(
-                recordService.filterRecords(mapperUtil.getModelMapper().map(searchRecord, RecordDto.class)),
-                RecordViewModel.class);
+    public String getFilteredDoctors(Model model, @ModelAttribute("searchRecord") RecordSearchModel searchRecord) {
+        Specification<Record> spec = RecordSpecification.filterRecords(
+                searchRecord.getDoctorFirstName(),
+                searchRecord.getDoctorLastName(),
+                searchRecord.getPatientFirstName(),
+                searchRecord.getPatientLastName(),
+                searchRecord.getPatientEgn(),
+                searchRecord.getDiagnoseName(),
+                localDateToDate(searchRecord.getVisitDateFrom()),
+                localDateToDate(searchRecord.getVisitDateTo()));
+        List<RecordViewModel> records = mapperUtil.mapList(recordService.filterRecords(spec), RecordViewModel.class);
         model.addAttribute("records", records);
         return "records";
     }

@@ -24,6 +24,8 @@ public class RecordSearchModel {
 
     private String diagnoseName;
 
-    private LocalDate visitDate;
+    private LocalDate visitDateFrom;
+
+    private LocalDate visitDateTo;
 
 }
