@@ -1,6 +1,7 @@
 package org.example.medicalrecord.configuration;
 
 import lombok.AllArgsConstructor;
+import org.example.medicalrecord.data.enums.Roles;
 import org.example.medicalrecord.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,26 +42,26 @@ public class SecurityConfig {
         http.authorizeHttpRequests(authz -> authz
                 //.requestMatchers(HttpMethod.GET, "/medicines").hasAuthority("CUSTOMER")
 
-                        .requestMatchers("/doctors").hasAnyAuthority("DOCTOR", "ADMIN")
-                        .requestMatchers("/doctors/edit-doctor/*").hasAnyAuthority("DOCTOR", "ADMIN")
-                        .requestMatchers("/doctors/update/*").hasAnyAuthority("DOCTOR", "ADMIN")
-                        .requestMatchers("/doctors/*/add-speciality").hasAnyAuthority("DOCTOR", "ADMIN")
-                        .requestMatchers("/doctors/*/remove-speciality").hasAnyAuthority("DOCTOR", "ADMIN")
-                        .requestMatchers("/doctors/delete/*").hasAuthority("ADMIN")
+                        .requestMatchers("/doctors").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
+                        .requestMatchers("/doctors/edit-doctor/*").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
+                        .requestMatchers("/doctors/update/*").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
+                        .requestMatchers("/doctors/*/add-speciality").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
+                        .requestMatchers("/doctors/*/remove-speciality").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
+                        .requestMatchers("/doctors/delete/*").hasAuthority(Roles.ROLE_ADMIN.name())
 
-                        .requestMatchers("/patients").hasAnyAuthority("DOCTOR", "ADMIN")
-                        .requestMatchers("/patients/filter").hasAnyAuthority("DOCTOR", "ADMIN", "PATIENT")
-                        .requestMatchers("/patients/edit-patient/*").hasAnyAuthority("DOCTOR", "ADMIN", "PATIENT")
-                        .requestMatchers("/patients/update/*").hasAnyAuthority("ADMIN", "PATIENT")
-                        .requestMatchers("/patients/delete/*").hasAuthority("ADMIN")
+                        .requestMatchers("/patients").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
+                        .requestMatchers("/patients/filter").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name(), Roles.ROLE_PATIENT.name())
+                        .requestMatchers("/patients/edit-patient/*").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name(), Roles.ROLE_PATIENT.name())
+                        .requestMatchers("/patients/update/*").hasAnyAuthority(Roles.ROLE_ADMIN.name(), Roles.ROLE_PATIENT.name())
+                        .requestMatchers("/patients/delete/*").hasAuthority(Roles.ROLE_ADMIN.name())
 
-                        .requestMatchers("/records").hasAnyAuthority("DOCTOR", "ADMIN")
-                        .requestMatchers("/records/filter").hasAnyAuthority("DOCTOR", "ADMIN")
-                        .requestMatchers("/records/create-record").hasAnyAuthority("DOCTOR", "ADMIN")
-                        .requestMatchers("/records/create").hasAnyAuthority("DOCTOR", "ADMIN")
-                        .requestMatchers("/records/edit-record/*").hasAnyAuthority("DOCTOR", "ADMIN")
-                        .requestMatchers("/records/update/*").hasAnyAuthority("DOCTOR", "ADMIN")
-                        .requestMatchers("/records/delete/*").hasAnyAuthority("DOCTOR", "ADMIN")
+                        .requestMatchers("/records").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
+                        .requestMatchers("/records/filter").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
+                        .requestMatchers("/records/create-record").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
+                        .requestMatchers("/records/create").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
+                        .requestMatchers("/records/edit-record/*").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
+                        .requestMatchers("/records/update/*").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
+                        .requestMatchers("/records/delete/*").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
 
                         .requestMatchers("/css/**", "/js/**", "/assets/**").permitAll()
                         .requestMatchers("/auth/signup").permitAll()
