@@ -8,6 +8,7 @@ import org.example.medicalrecord.data.entity.Patient;
 import org.example.medicalrecord.data.entity.Role;
 import org.example.medicalrecord.data.entity.User;
 import org.example.medicalrecord.data.enums.Roles;
+import org.example.medicalrecord.exceptions.AuthorizationFailureException;
 import org.example.medicalrecord.exceptions.EntityNotFoundException;
 import org.example.medicalrecord.repository.DoctorRepository;
 import org.example.medicalrecord.repository.PatientRepository;
@@ -45,7 +46,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             User loggedInUser = (User) authentication.getPrincipal();
             return mapperUtil.getModelMapper().map(loggedInUser, UserDto.class);
         }
-        return null;
+        throw new AuthorizationFailureException("There is not a logged in user");
     }
 
     @Override

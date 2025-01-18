@@ -78,12 +78,10 @@ public class RecordServiceImpl implements RecordService {
         Record record = mapperUtil.getModelMapper().map(recordDto, Record.class);
         record.setDoctor(fetchDoctor(recordDto));
         record.setPatient(fetchPatient(recordDto));
-
         record.setDiagnose(new Diagnose(recordDto.getDiagnoseName(), recordDto.getReceipt(), record));
         if (recordDto.getStartDate() != null){
             record.setSickLeave(new SickLeave(recordDto.getStartDate(), recordDto.getLeaveDays(), record));
         }
-
         return mapperUtil.getModelMapper().map(
                 recordRepository.save(record),
                 RecordDto.class);

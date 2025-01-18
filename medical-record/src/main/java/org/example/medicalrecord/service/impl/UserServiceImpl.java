@@ -5,7 +5,7 @@ import org.example.medicalrecord.data.entity.User;
 import org.example.medicalrecord.exceptions.EntityNotFoundException;
 import org.example.medicalrecord.repository.UserRepository;
 import org.example.medicalrecord.service.UserService;
-import org.modelmapper.ModelMapper;
+import org.example.medicalrecord.util.ModelMapperUtil;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 
-    private final ModelMapper mapper;
+    private final ModelMapperUtil mapperUtil;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
     public User updateUser(User user, long id) {
         return this.userRepository.findById(id)
                 .map(user1 -> {
-                    mapper.map(user, user1);
+                    mapperUtil.getModelMapper().map(user, user1);
                     return this.userRepository.save(user1);
                 }).orElseGet(() ->
                         this.userRepository.save(user)

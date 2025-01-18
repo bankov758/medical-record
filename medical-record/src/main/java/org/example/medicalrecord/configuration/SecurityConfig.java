@@ -45,8 +45,8 @@ public class SecurityConfig {
                         .requestMatchers("/doctors").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
                         .requestMatchers("/doctors/edit-doctor/*").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
                         .requestMatchers("/doctors/update/*").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
-                        .requestMatchers("/doctors/*/add-speciality").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
-                        .requestMatchers("/doctors/*/remove-speciality").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
+                        .requestMatchers("/doctors/*/add-speciality").hasAuthority(Roles.ROLE_ADMIN.name())
+                        .requestMatchers("/doctors/*/remove-speciality").hasAuthority(Roles.ROLE_ADMIN.name())
                         .requestMatchers("/doctors/delete/*").hasAuthority(Roles.ROLE_ADMIN.name())
 
                         .requestMatchers("/patients").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())

@@ -3,6 +3,7 @@ package org.example.medicalrecord.service.impl;
 import lombok.AllArgsConstructor;
 import org.example.medicalrecord.data.dto.SickLeaveDto;
 import org.example.medicalrecord.data.entity.SickLeave;
+import org.example.medicalrecord.exceptions.EntityNotFoundException;
 import org.example.medicalrecord.repository.SickLeaveRepository;
 import org.example.medicalrecord.service.SickLeaveService;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class SickLeaveServiceImpl implements SickLeaveService {
 
     @Override
     public SickLeave updateSickLeave(SickLeaveDto SickLeaveDto, long id) {
-        SickLeave SickLeave = sickLeaveRepository.findByRecordId(id);
+        SickLeave SickLeave = sickLeaveRepository.findByRecordId(id).orElseThrow(() -> new EntityNotFoundException(SickLeave.class, "record with", id));
         if (SickLeave == null) {
             SickLeave = new SickLeave();
         }

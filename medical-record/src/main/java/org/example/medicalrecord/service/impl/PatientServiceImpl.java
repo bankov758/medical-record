@@ -2,11 +2,15 @@ package org.example.medicalrecord.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.example.medicalrecord.data.dto.PatientDto;
+import org.example.medicalrecord.data.dto.UserDto;
 import org.example.medicalrecord.data.entity.Doctor;
 import org.example.medicalrecord.data.entity.Patient;
+import org.example.medicalrecord.data.enums.Roles;
+import org.example.medicalrecord.exceptions.AuthorizationFailureException;
 import org.example.medicalrecord.exceptions.EntityNotFoundException;
 import org.example.medicalrecord.repository.DoctorRepository;
 import org.example.medicalrecord.repository.PatientRepository;
+import org.example.medicalrecord.service.AuthenticationService;
 import org.example.medicalrecord.service.PatientService;
 import org.example.medicalrecord.util.ModelMapperUtil;
 import org.springframework.data.jpa.domain.Specification;
@@ -22,6 +26,8 @@ public class PatientServiceImpl implements PatientService {
     private PatientRepository patientRepository;
 
     private DoctorRepository doctorRepository;
+
+    private final AuthenticationService authenticationService;
 
     private final ModelMapperUtil mapperUtil;
 
@@ -53,6 +59,10 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public Patient updatePatient(PatientDto patientDto, long id) {
         Patient patient = patientRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Patient.class, "id", id));
+        UserDto loggedInUser = authenticationService.getLoggedInUser();
+        if (patient.getId() != loggedInUser.getId() && !loggedInUser.getAuthorities().contains(Roles.ROLE_ADMIN.name())) {
+            throw new AuthorizationFailureException("You are not authorized to update this record");
+        }
         mapperUtil.getModelMapper().map(patientDto, patient);
         if (patientDto.getGpId() != 0){
             patient.setGp(doctorRepository.findById(patientDto.getGpId())

@@ -3,11 +3,15 @@ package org.example.medicalrecord.service.impl;
 import lombok.AllArgsConstructor;
 import org.example.medicalrecord.data.dto.DoctorDto;
 import org.example.medicalrecord.data.dto.SpecialityDto;
+import org.example.medicalrecord.data.dto.UserDto;
 import org.example.medicalrecord.data.entity.Doctor;
 import org.example.medicalrecord.data.entity.Speciality;
+import org.example.medicalrecord.data.enums.Roles;
+import org.example.medicalrecord.exceptions.AuthorizationFailureException;
 import org.example.medicalrecord.exceptions.EntityNotFoundException;
 import org.example.medicalrecord.repository.DoctorRepository;
 import org.example.medicalrecord.repository.SpecialityRepository;
+import org.example.medicalrecord.service.AuthenticationService;
 import org.example.medicalrecord.service.DoctorService;
 import org.example.medicalrecord.util.ModelMapperUtil;
 import org.springframework.stereotype.Service;
@@ -22,6 +26,8 @@ public class DoctorServiceImpl implements DoctorService {
     private DoctorRepository doctorRepository;
 
     private SpecialityRepository specialityRepository;
+
+    private final AuthenticationService authenticationService;
 
     private final ModelMapperUtil mapperUtil;
 
@@ -65,10 +71,6 @@ public class DoctorServiceImpl implements DoctorService {
         return doctorDto;
     }
 
-    private Doctor fetchDoctor(long id) {
-        return doctorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Doctor.class, "id", id));
-    }
-
     @Override
     public DoctorDto createDoctor(DoctorDto doctorDto) {
         return mapperUtil.getModelMapper().map(
@@ -79,6 +81,10 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public DoctorDto updateDoctor(DoctorDto doctorDto, long id) {
         Doctor doctor = fetchDoctor(id);
+        UserDto loggedInUser = authenticationService.getLoggedInUser();
+        if (doctor.getId() != loggedInUser.getId() && !loggedInUser.getAuthorities().contains(Roles.ROLE_ADMIN.name())) {
+            throw new AuthorizationFailureException("You are not authorized to update this record");
+        }
         mapperUtil.getModelMapper()
                 .typeMap(DoctorDto.class, Doctor.class)
                 .addMappings(mapper -> mapper.skip(Doctor::setSpecialities))
@@ -119,6 +125,10 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public void deleteDoctor(long id) {
         doctorRepository.deleteById(id);
+    }
+
+    private Doctor fetchDoctor(long id) {
+        return doctorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Doctor.class, "id", id));
     }
     
 }

@@ -3,6 +3,7 @@ package org.example.medicalrecord.service.impl;
 import lombok.AllArgsConstructor;
 import org.example.medicalrecord.data.dto.DiagnoseDto;
 import org.example.medicalrecord.data.entity.Diagnose;
+import org.example.medicalrecord.exceptions.EntityNotFoundException;
 import org.example.medicalrecord.repository.DiagnoseRepository;
 import org.example.medicalrecord.service.DiagnoseService;
 import org.example.medicalrecord.util.ModelMapperUtil;
@@ -25,17 +26,18 @@ public class DiagnoseServiceImpl implements DiagnoseService {
 
     @Override
     public List<DiagnoseDto> getTopDiagnoses() {
-        return diagnoseRepository.findTop3DiagnosesByNameCount1();
+        return diagnoseRepository.findTop3DiagnosesByNameCount();
     }
 
     @Override
     public DiagnoseDto getDiagnose(long id) {
-        return mapperUtil.getModelMapper().map(diagnoseRepository.findById(id).orElse(null), DiagnoseDto.class);
+        return mapperUtil.getModelMapper().map(fetchDiagnose(id),
+                DiagnoseDto.class);
     }
 
     @Override
     public DiagnoseDto updateDiagnose(DiagnoseDto diagnoseDto, long id) {
-        Diagnose diagnose = diagnoseRepository.findByRecordId(id);
+        Diagnose diagnose = fetchDiagnose(id);
         if (diagnose == null) {
             diagnose = new Diagnose();
         }
@@ -48,5 +50,10 @@ public class DiagnoseServiceImpl implements DiagnoseService {
     @Override
     public void deleteDiagnose(long id) {
         diagnoseRepository.deleteById(id);
+    }
+
+    private Diagnose fetchDiagnose(long id) {
+        return diagnoseRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Diagnose.class, "id", id));
     }
 }
