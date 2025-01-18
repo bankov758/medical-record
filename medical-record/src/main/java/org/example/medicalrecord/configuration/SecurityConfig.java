@@ -55,11 +55,11 @@ public class SecurityConfig {
                         .requestMatchers("/patients/update/*").hasAnyAuthority(Roles.ROLE_ADMIN.name(), Roles.ROLE_PATIENT.name())
                         .requestMatchers("/patients/delete/*").hasAuthority(Roles.ROLE_ADMIN.name())
 
-                        .requestMatchers("/records").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
-                        .requestMatchers("/records/filter").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
+                        .requestMatchers("/records").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name(), Roles.ROLE_PATIENT.name())
+                        .requestMatchers("/records/filter").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name(), Roles.ROLE_PATIENT.name())
                         .requestMatchers("/records/create-record").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
                         .requestMatchers("/records/create").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
-                        .requestMatchers("/records/edit-record/*").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
+                        .requestMatchers("/records/edit-record/*").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name(), Roles.ROLE_PATIENT.name())
                         .requestMatchers("/records/update/*").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
                         .requestMatchers("/records/delete/*").hasAnyAuthority(Roles.ROLE_DOCTOR.name(), Roles.ROLE_ADMIN.name())
 

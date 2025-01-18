@@ -58,10 +58,15 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public List<RecordDto> filterRecords(Specification<Record> specification) {
+        UserDto loggedInUser = authenticationService.getLoggedInUser();
         List<Record> result = recordRepository.findAll(specification);
-        return result.stream()
-                .map(record -> mapperUtil.getModelMapper().map(record, RecordDto.class))
+        if (loggedInUser.getAuthorities().contains(Roles.ROLE_DOCTOR.name()) || loggedInUser.getAuthorities().contains(Roles.ROLE_ADMIN.name())) {
+            return mapperUtil.mapList(result, RecordDto.class);
+        }
+        result = result.stream()
+                .filter(record -> record.getPatient().getId() == loggedInUser.getId())
                 .collect(Collectors.toList());
+        return mapperUtil.mapList(result, RecordDto.class);
     }
 
     private Record fetchRecord(long id) {
