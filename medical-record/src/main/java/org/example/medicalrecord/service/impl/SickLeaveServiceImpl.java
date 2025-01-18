@@ -22,7 +22,7 @@ public class SickLeaveServiceImpl implements SickLeaveService {
         if (results.isEmpty()) {
             return "No sick leaves found.";
         }
-        Object[] topResult = results.get(0);
+        Object[] topResult = results.getFirst();
         int month = (int) topResult[0];
         long count = (long) topResult[1];
         String monthName = Month.of(month).name();
