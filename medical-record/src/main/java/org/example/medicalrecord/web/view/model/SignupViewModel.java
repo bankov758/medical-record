@@ -44,4 +44,6 @@ public class SignupViewModel {
     )
     private String confirmPassword;
 
+    private Boolean isDoctor;
+
 }

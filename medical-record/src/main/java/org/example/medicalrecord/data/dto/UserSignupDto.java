@@ -38,4 +38,6 @@ public class UserSignupDto {
     )
     private String password;
 
+    private Boolean isDoctor;
+
 }

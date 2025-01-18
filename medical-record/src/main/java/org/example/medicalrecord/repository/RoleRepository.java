@@ -1,7 +1,5 @@
 package org.example.medicalrecord.repository;
 
-
-
 import org.example.medicalrecord.data.entity.Role;
 import org.example.medicalrecord.data.enums.Roles;
 import org.springframework.data.jpa.repository.JpaRepository;
