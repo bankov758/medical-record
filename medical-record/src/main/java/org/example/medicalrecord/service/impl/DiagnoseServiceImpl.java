@@ -7,6 +7,7 @@ import org.example.medicalrecord.exceptions.EntityNotFoundException;
 import org.example.medicalrecord.repository.DiagnoseRepository;
 import org.example.medicalrecord.service.DiagnoseService;
 import org.example.medicalrecord.util.ModelMapperUtil;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public class DiagnoseServiceImpl implements DiagnoseService {
     }
 
     @Override
+    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR', 'ROLE_ADMIN')")
     public DiagnoseDto updateDiagnose(DiagnoseDto diagnoseDto, long id) {
         Diagnose diagnose = fetchDiagnose(id);
         if (diagnose == null) {
@@ -48,6 +50,7 @@ public class DiagnoseServiceImpl implements DiagnoseService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void deleteDiagnose(long id) {
         diagnoseRepository.deleteById(id);
     }

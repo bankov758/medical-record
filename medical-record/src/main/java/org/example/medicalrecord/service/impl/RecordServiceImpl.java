@@ -19,6 +19,7 @@ import org.example.medicalrecord.service.RecordService;
 import org.example.medicalrecord.service.SickLeaveService;
 import org.example.medicalrecord.util.ModelMapperUtil;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -74,6 +75,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
+    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR', 'ROLE_ADMIN')")
     public RecordDto createRecord(RecordDto recordDto) {
         Record record = mapperUtil.getModelMapper().map(recordDto, Record.class);
         record.setDoctor(fetchDoctor(recordDto));
@@ -88,6 +90,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
+    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR', 'ROLE_ADMIN')")
     public RecordDto updateRecord(RecordDto recordDto, long id) {
         Record record = fetchRecord(id);
         UserDto loggedInUser = authenticationService.getLoggedInUser();
@@ -105,6 +108,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
+    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR', 'ROLE_ADMIN')")
     public void deleteRecord(long id) {
         recordRepository.deleteById(id);
     }

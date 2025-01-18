@@ -14,6 +14,7 @@ import org.example.medicalrecord.repository.SpecialityRepository;
 import org.example.medicalrecord.service.AuthenticationService;
 import org.example.medicalrecord.service.DoctorService;
 import org.example.medicalrecord.util.ModelMapperUtil;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class DoctorServiceImpl implements DoctorService {
     private final ModelMapperUtil mapperUtil;
 
     @Override
+    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR', 'ROLE_ADMIN')")
     public List<DoctorDto> getDoctors() {
         return doctorRepository.findAll()
                 .stream()
@@ -64,6 +66,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR', 'ROLE_ADMIN')")
     public DoctorDto getDoctor(long id) {
         DoctorDto doctorDto = mapperUtil.getModelMapper().map(fetchDoctor(id), DoctorDto.class);
         doctorDto.setNumberOfVisits(doctorRepository.countByRecordsDoctorId(id));
@@ -72,6 +75,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR', 'ROLE_ADMIN')")
     public DoctorDto createDoctor(DoctorDto doctorDto) {
         return mapperUtil.getModelMapper().map(
                 doctorRepository.save(mapperUtil.getModelMapper().map(doctorDto, Doctor.class)),
@@ -79,6 +83,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR', 'ROLE_ADMIN')")
     public DoctorDto updateDoctor(DoctorDto doctorDto, long id) {
         Doctor doctor = fetchDoctor(id);
         UserDto loggedInUser = authenticationService.getLoggedInUser();
@@ -102,6 +107,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void addSpeciality(String speciality, long doctorId) throws EntityNotFoundException {
         Doctor doctor = fetchDoctor(doctorId);
         if (!doctorRepository.existsByIdAndSpecialitiesSpecialtyName(doctorId, speciality)) {
@@ -113,6 +119,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public void removeSpeciality(long specialityId, long doctorId) {
         Doctor doctor = fetchDoctor(doctorId);
         if (doctorRepository.existsByIdAndSpecialitiesId(doctorId, specialityId)){
@@ -123,6 +130,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void deleteDoctor(long id) {
         doctorRepository.deleteById(id);
     }

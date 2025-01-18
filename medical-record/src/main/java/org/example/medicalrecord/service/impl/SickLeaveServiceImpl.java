@@ -6,6 +6,7 @@ import org.example.medicalrecord.data.entity.SickLeave;
 import org.example.medicalrecord.exceptions.EntityNotFoundException;
 import org.example.medicalrecord.repository.SickLeaveRepository;
 import org.example.medicalrecord.service.SickLeaveService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.Month;
@@ -32,6 +33,7 @@ public class SickLeaveServiceImpl implements SickLeaveService {
     }
 
     @Override
+    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR', 'ROLE_ADMIN')")
     public SickLeave updateSickLeave(SickLeaveDto SickLeaveDto, long id) {
         SickLeave SickLeave = sickLeaveRepository.findByRecordId(id).orElseThrow(() -> new EntityNotFoundException(SickLeave.class, "record with", id));
         if (SickLeave == null) {

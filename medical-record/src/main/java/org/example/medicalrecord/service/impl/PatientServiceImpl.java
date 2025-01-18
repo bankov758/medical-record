@@ -14,6 +14,7 @@ import org.example.medicalrecord.service.AuthenticationService;
 import org.example.medicalrecord.service.PatientService;
 import org.example.medicalrecord.util.ModelMapperUtil;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class PatientServiceImpl implements PatientService {
     private final ModelMapperUtil mapperUtil;
 
     @Override
+    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR', 'ROLE_ADMIN')")
     public List<PatientDto> getPatients() {
         return mapperUtil.mapList(patientRepository.findAll(), PatientDto.class);
     }
@@ -44,6 +46,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR', 'ROLE_ADMIN')")
     public List<PatientDto> filterPatients(Specification<Patient> specification) {
         List<Patient> result = patientRepository.findAll(specification);
         return result.stream()
@@ -52,11 +55,13 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR', 'ROLE_ADMIN')")
     public Patient createPatient(Patient patient) {
         return patientRepository.save(patient);
     }
 
     @Override
+    @PreAuthorize("hasAnyAuthority('ROLE_PATIENT', 'ROLE_ADMIN')")
     public Patient updatePatient(PatientDto patientDto, long id) {
         Patient patient = patientRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Patient.class, "id", id));
         UserDto loggedInUser = authenticationService.getLoggedInUser();
@@ -72,6 +77,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void deletePatient(long id) {
         patientRepository.deleteById(id);
     }
