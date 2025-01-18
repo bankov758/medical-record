@@ -82,4 +82,10 @@ public class DoctorController {
         return "redirect:/doctors/edit-doctor/" + id;
     }
 
+    @GetMapping("/delete/{id}")
+    public String deleteDoctor(@PathVariable Long id) {
+        doctorService.deleteDoctor(id);
+        return "redirect:/doctors";
+    }
+
 }

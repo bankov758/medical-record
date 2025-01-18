@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.example.medicalrecord.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -37,39 +36,36 @@ public class SecurityConfig {
         return new ProviderManager(authProvider);
     }
 
-    //    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        return http
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .authorizeHttpRequests(auth -> {
-//                    auth.requestMatchers("/auth/**").permitAll();
-//                    auth.requestMatchers("/headmasters/**").hasRole(Roles.ADMIN.name());
-//                    auth.requestMatchers("/grades/**").hasRole(Roles.ADMIN.name());
-//                    //auth.requestMatchers("/user/**").hasAnyRole("ADMIN", "USER");
-//                    auth.anyRequest().authenticated();
-//                })
-//                .logout(logout -> logout
-//                        .logoutUrl("/auth/logout")
-//                        .logoutSuccessUrl("/auth/login")
-//                        .invalidateHttpSession(true)
-//                        .deleteCookies("JSESSIONID")
-//                )
-////                .oauth2ResourceServer(oauth2 -> oauth2
-////                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
-//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                //                .httpBasic(Customizer.withDefaults())
-//                .formLogin(Customizer.withDefaults())
-//                .build();
-//    }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authz -> authz
+                //.requestMatchers(HttpMethod.GET, "/medicines").hasAuthority("CUSTOMER")
+
+                        .requestMatchers("/doctors").hasAnyAuthority("DOCTOR", "ADMIN")
+                        .requestMatchers("/doctors/edit-doctor/*").hasAnyAuthority("DOCTOR", "ADMIN")
+                        .requestMatchers("/doctors/update/*").hasAnyAuthority("DOCTOR", "ADMIN")
+                        .requestMatchers("/doctors/*/add-speciality").hasAnyAuthority("DOCTOR", "ADMIN")
+                        .requestMatchers("/doctors/*/remove-speciality").hasAnyAuthority("DOCTOR", "ADMIN")
+                        .requestMatchers("/doctors/delete/*").hasAuthority("ADMIN")
+
+                        .requestMatchers("/patients").hasAnyAuthority("DOCTOR", "ADMIN")
+                        .requestMatchers("/patients/filter").hasAnyAuthority("DOCTOR", "ADMIN", "PATIENT")
+                        .requestMatchers("/patients/edit-patient/*").hasAnyAuthority("DOCTOR", "ADMIN", "PATIENT")
+                        .requestMatchers("/patients/update/*").hasAnyAuthority("ADMIN", "PATIENT")
+                        .requestMatchers("/patients/delete/*").hasAuthority("ADMIN")
+
+                        .requestMatchers("/records").hasAnyAuthority("DOCTOR", "ADMIN")
+                        .requestMatchers("/records/filter").hasAnyAuthority("DOCTOR", "ADMIN")
+                        .requestMatchers("/records/create-record").hasAnyAuthority("DOCTOR", "ADMIN")
+                        .requestMatchers("/records/create").hasAnyAuthority("DOCTOR", "ADMIN")
+                        .requestMatchers("/records/edit-record/*").hasAnyAuthority("DOCTOR", "ADMIN")
+                        .requestMatchers("/records/update/*").hasAnyAuthority("DOCTOR", "ADMIN")
+                        .requestMatchers("/records/delete/*").hasAnyAuthority("DOCTOR", "ADMIN")
+
                         .requestMatchers("/css/**", "/js/**", "/assets/**").permitAll()
-                        .requestMatchers("/recipes/**").hasAuthority("DOCTOR")
-                        .requestMatchers("/medicines/**").hasAuthority("SELLER")
-                        .requestMatchers(HttpMethod.GET, "/medicines").hasAuthority("CUSTOMER")
                         .requestMatchers("/auth/signup").permitAll()
                         .requestMatchers("/").permitAll()
+
                         .anyRequest().authenticated())
                 .formLogin(Customizer.withDefaults())
                 .logout(logout -> logout
