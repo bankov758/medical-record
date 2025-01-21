@@ -1,6 +1,7 @@
 package org.example.medicalrecord.data.dto;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Set;
 
@@ -10,6 +11,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@SuperBuilder
 public class DoctorDto extends UserDto {
 
     private Boolean isGp;

@@ -98,6 +98,7 @@ public class RecordController {
 
     @GetMapping("/edit-record/{id}")
     public String showEditRecordForm(Model model, @PathVariable Long id) {
+        model.addAttribute("loggedId", authService.getLoggedInUser().getId());
         model.addAttribute("record", mapperUtil.getModelMapper().map(recordService.getRecord(id), RecordViewModel.class));
         model.addAttribute("doctors", mapperUtil.mapList(doctorService.getDoctors(), RecordDoctorViewModel.class));
         return "record-update";

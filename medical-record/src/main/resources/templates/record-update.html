@@ -4,9 +4,6 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Hugo 0.122.0">
     <title>Record</title>
 
     <link rel="canonical" th:href="@{https://getbootstrap.com/docs/5.3/examples/checkout/}">
@@ -76,7 +73,7 @@
                                 <option th:each="doctor : ${doctors}"
                                         th:text="${doctor.firstName} + ' ' + ${doctor.lastName}"
                                         th:value="${doctor.id}"
-                                        th:attr="selected=(${doctor.id} == ${#authentication.principal.id})">
+                                        th:attr="selected=(${doctor.id} == ${loggedId})">
                                 </option>
                             </select>
                             <span class="text-danger" th:if="${#fields.hasErrors('doctorId')}" th:errors="*{doctorId}"></span>
