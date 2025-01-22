@@ -294,12 +294,8 @@ class RecordServiceImplTest {
         RecordDto recordDto = RecordDto.builder()
                 .id(1L)
                 .visitDate(java.sql.Date.valueOf("2025-01-01"))
-                .doctorId(2L)
-                .patientEgn("1234567890")
                 .diagnoseName("Updated Diagnose")
-                .receipt("Updated Receipt")
                 .startDate(java.sql.Date.valueOf("2025-02-01"))
-                .leaveDays(5)
                 .build();
 
         UserDto userDoctor = UserDto.builder()
@@ -307,17 +303,19 @@ class RecordServiceImplTest {
                 .authorities(Set.of("ROLE_DOCTOR"))
                 .build();
 
+        Patient patient = Patient.builder().id(3L).egn("1234567890").build();
+        Doctor doctor = Doctor.builder().id(2L).build();
         Record existingRecord = Record.builder()
                 .id(1L)
-                .doctor(Doctor.builder().id(2L).build())
-                .patient(Patient.builder().id(3L).egn("1234567890").build())
+                .doctor(doctor)
+                .patient(patient)
                 .build();
 
         given(recordRepository.findById(1L)).willReturn(Optional.of(existingRecord));
         given(authenticationService.getLoggedInUser()).willReturn(userDoctor);
         given(mockModelMapper.map(any(Record.class), eq(RecordDto.class))).willReturn(recordDto);
-        given(doctorRepository.findById(recordDto.getDoctorId())).willReturn(Optional.of(Doctor.builder().id(2L).build()));
-        given(patientRepository.findByEgn(recordDto.getPatientEgn())).willReturn(Optional.of(Patient.builder().id(3L).egn("1234567890").build()));
+        given(doctorRepository.findById(recordDto.getDoctorId())).willReturn(Optional.of(mock(Doctor.class)));
+        given(patientRepository.findByEgn(recordDto.getPatientEgn())).willReturn(Optional.of(mock(Patient.class)));
         given(recordRepository.save(any(Record.class))).willAnswer(invocation -> invocation.getArgument(0));
 
         RecordDto result = recordService.updateRecord(recordDto, 1L);
