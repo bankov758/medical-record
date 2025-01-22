@@ -296,6 +296,7 @@ class RecordServiceImplTest {
                 .visitDate(java.sql.Date.valueOf("2025-01-01"))
                 .diagnoseName("Updated Diagnose")
                 .startDate(java.sql.Date.valueOf("2025-02-01"))
+                .leaveDays(2)
                 .build();
 
         UserDto userDoctor = UserDto.builder()
@@ -309,6 +310,7 @@ class RecordServiceImplTest {
                 .id(1L)
                 .doctor(doctor)
                 .patient(patient)
+                .sickLeave(SickLeave.builder().startDate(java.sql.Date.valueOf("2025-01-01")).build())
                 .build();
 
         given(recordRepository.findById(1L)).willReturn(Optional.of(existingRecord));

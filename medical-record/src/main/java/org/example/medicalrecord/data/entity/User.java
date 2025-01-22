@@ -24,6 +24,7 @@ import java.util.Set;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @SuperBuilder
+@Table(name = "\"user\"")
 public class User extends BaseEntity implements UserDetails {
 
     @Column(nullable = false)
