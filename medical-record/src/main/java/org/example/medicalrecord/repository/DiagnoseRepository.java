@@ -6,17 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface DiagnoseRepository extends JpaRepository<Diagnose, Long> {
 
-    Optional<Diagnose> findByRecordId(Long recordId);
-
-    long countByDiagnoseName(String diagnoseName);
-
     @Query("SELECT new org.example.medicalrecord.data.dto.DiagnoseDto(COUNT(d), d.diagnoseName) FROM Diagnose d " +
             "GROUP BY d.diagnoseName " +
-            "ORDER BY COUNT(d) DESC")
+            "ORDER BY COUNT(d) DESC limit 3")
     List<DiagnoseDto> findTop3DiagnosesByNameCount();
 
 }

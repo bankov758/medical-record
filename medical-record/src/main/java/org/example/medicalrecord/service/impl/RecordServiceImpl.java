@@ -96,12 +96,16 @@ public class RecordServiceImpl implements RecordService {
         if (record.getDoctor().getId() != loggedInUser.getId() && !loggedInUser.getAuthorities().contains(Roles.ROLE_ADMIN.name())) {
             throw new AuthorizationFailureException("You are not authorized to update this record");
         }
-        if (recordDto.getVisitDate() != null){
+        if (recordDto.getVisitDate() != null) {
             record.setVisitDate(recordDto.getVisitDate());
         }
         diagnoseService.updateDiagnose(new DiagnoseDto(recordDto.getDiagnoseName(), recordDto.getReceipt(), record), id);
-        if (recordDto.getStartDate() != null){
-            sickLeaveService.updateSickLeave(new SickLeaveDto(recordDto.getStartDate(), recordDto.getLeaveDays(), record), id);
+        if (recordDto.getStartDate() != null && recordDto.getLeaveDays() != 0) {
+            if (record.getSickLeave() == null) {
+                record.setSickLeave(new SickLeave(recordDto.getStartDate(), recordDto.getLeaveDays(), record));
+            } else {
+                sickLeaveService.updateSickLeave(new SickLeaveDto(recordDto.getStartDate(), recordDto.getLeaveDays(), record), id);
+            }
         }
         record.setDoctor(fetchDoctor(recordDto));
         record.setPatient(fetchPatient(recordDto));
