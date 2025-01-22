@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.Optional;
 
 public interface PatientRepository extends JpaSpecificationExecutor<Patient>, JpaRepository<Patient, Long> {
-    Optional<Patient> findByEgn(String egn);
+    Optional<Patient> findByEgnAndFirstNameAndLastName(String egn, String firstName, String lastName);
 }

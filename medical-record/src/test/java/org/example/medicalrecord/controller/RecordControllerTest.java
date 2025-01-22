@@ -3,7 +3,6 @@ package org.example.medicalrecord.controller;
 import org.example.medicalrecord.configuration.SecurityConfig;
 import org.example.medicalrecord.data.dto.RecordDto;
 import org.example.medicalrecord.data.dto.UserDto;
-import org.example.medicalrecord.exceptions.EntityNotFoundException;
 import org.example.medicalrecord.service.AuthenticationService;
 import org.example.medicalrecord.service.DoctorService;
 import org.example.medicalrecord.service.RecordService;
@@ -173,25 +172,6 @@ public class RecordControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = {"ROLE_DOCTOR"})
-    void createRecordTestEntityNotFoundException() throws Exception {
-        RecordViewModel record = getValidMockRecordViewModel();
-
-        doThrow(new EntityNotFoundException("Error field doctorId"))
-                .when(recordService).createRecord(any(RecordDto.class));
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/records/create")
-                        .with(csrf())
-                        .flashAttr("record", record))
-                .andExpect(status().isOk())
-                .andExpect(view().name("record-create"))
-                .andExpect(model().attributeExists("doctors"))
-                .andDo(print());
-
-        verify(recordService, times(1)).createRecord(any(RecordDto.class));
-    }
-
-    @Test
     @WithMockUser(username = "doctor", authorities = {"ROLE_DOCTOR"})
     void showEditRecordFormTest() throws Exception {
         long recordId = 1L;
@@ -271,34 +251,6 @@ public class RecordControllerTest {
                 .andDo(print());
 
         verifyNoInteractions(recordService);
-    }
-
-    @Test
-    @WithMockUser(authorities = {"ROLE_DOCTOR"})
-    void updateRecordTestEntityNotFoundException() throws Exception {
-        Long id = 1L;
-
-        RecordViewModel recordViewModel = getValidMockRecordViewModel();
-
-        doThrow(new EntityNotFoundException("Error field doctorId"))
-                .when(recordService).updateRecord(any(RecordDto.class), eq(id));
-
-        List<RecordDoctorViewModel> doctors = List.of(
-                RecordDoctorViewModel.builder().id(2L).firstName("John").lastName("Doe").build()
-        );
-
-        given(doctorService.getDoctors()).willReturn(new ArrayList<>());
-        given(mapperUtil.mapList(anyList(), eq(RecordDoctorViewModel.class))).willReturn(doctors);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/records/update/{id}", id)
-                        .with(csrf())
-                        .flashAttr("record", recordViewModel))
-                .andExpect(status().isOk())
-                .andExpect(view().name("record-update"))
-                .andExpect(model().attribute("doctors", doctors))
-                .andDo(print());
-
-        verify(recordService, times(1)).updateRecord(any(RecordDto.class), eq(id));
     }
 
     @Test

@@ -249,7 +249,7 @@ class RecordServiceImplTest {
 
         given(mockModelMapper.map(recordDto, Record.class)).willReturn(record);
         given(doctorRepository.findById(recordDto.getDoctorId())).willReturn(Optional.of(doctor));
-        given(patientRepository.findByEgn(recordDto.getPatientEgn())).willReturn(Optional.of(patient));
+        given(patientRepository.findByEgnAndFirstNameAndLastName(recordDto.getPatientEgn(), null, null)).willReturn(Optional.of(patient));
         given(mockModelMapper.map(record, RecordDto.class)).willReturn(recordDto);
         given(recordRepository.save(any(Record.class))).willAnswer(invocation -> {
             Record saved = invocation.getArgument(0);
@@ -315,7 +315,7 @@ class RecordServiceImplTest {
         given(authenticationService.getLoggedInUser()).willReturn(userDoctor);
         given(mockModelMapper.map(any(Record.class), eq(RecordDto.class))).willReturn(recordDto);
         given(doctorRepository.findById(recordDto.getDoctorId())).willReturn(Optional.of(mock(Doctor.class)));
-        given(patientRepository.findByEgn(recordDto.getPatientEgn())).willReturn(Optional.of(mock(Patient.class)));
+        given(patientRepository.findByEgnAndFirstNameAndLastName(recordDto.getPatientEgn(), null, null)).willReturn(Optional.of(mock(Patient.class)));
         given(recordRepository.save(any(Record.class))).willAnswer(invocation -> invocation.getArgument(0));
 
         RecordDto result = recordService.updateRecord(recordDto, 1L);

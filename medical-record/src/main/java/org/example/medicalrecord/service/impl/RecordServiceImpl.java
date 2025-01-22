@@ -100,7 +100,9 @@ public class RecordServiceImpl implements RecordService {
             record.setVisitDate(recordDto.getVisitDate());
         }
         diagnoseService.updateDiagnose(new DiagnoseDto(recordDto.getDiagnoseName(), recordDto.getReceipt(), record), id);
-        sickLeaveService.updateSickLeave(new SickLeaveDto(recordDto.getStartDate(), recordDto.getLeaveDays(), record), id);
+        if (recordDto.getStartDate() != null){
+            sickLeaveService.updateSickLeave(new SickLeaveDto(recordDto.getStartDate(), recordDto.getLeaveDays(), record), id);
+        }
         record.setDoctor(fetchDoctor(recordDto));
         record.setPatient(fetchPatient(recordDto));
         return mapperUtil.getModelMapper().map(recordRepository.save(record), RecordDto.class);
@@ -122,7 +124,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     private Patient fetchPatient(RecordDto recordDto) {
-        return patientRepository.findByEgn(recordDto.getPatientEgn())
-                .orElseThrow(() -> new EntityNotFoundException("Patient wth patientEgn " + recordDto.getPatientEgn() + " was not found"));
+        return patientRepository.findByEgnAndFirstNameAndLastName(recordDto.getPatientEgn(), recordDto.getPatientFirstName(), recordDto.getPatientLastName())
+                .orElseThrow(() -> new EntityNotFoundException("Patient wth this egn name or last name was not found"));
     }
 }

@@ -79,13 +79,8 @@ public class RecordController {
             model.addAttribute("doctors", mapperUtil.mapList(doctorService.getDoctors(), RecordDoctorViewModel.class));
             return "record-create";
         }
-        try {
-            recordService.createRecord(mapperUtil.getModelMapper().map(record, RecordDto.class));
-            return "redirect:/records";
-        } catch (EntityNotFoundException ex) {
-            handleErrors(record, errors, model, ex);
-            return "record-create";
-        }
+        recordService.createRecord(mapperUtil.getModelMapper().map(record, RecordDto.class));
+        return "redirect:/records";
     }
 
     private void handleErrors(@ModelAttribute("record") @Valid RecordViewModel record, BindingResult errors, Model model, EntityNotFoundException ex) {
@@ -113,13 +108,8 @@ public class RecordController {
             model.addAttribute("doctors", mapperUtil.mapList(doctorService.getDoctors(), RecordDoctorViewModel.class));
             return "record-update";
         }
-        try {
-            recordService.updateRecord(mapperUtil.getModelMapper().map(record, RecordDto.class), id);
-            return "redirect:/records/edit-record/" + id;
-        } catch (EntityNotFoundException ex) {
-            handleErrors(record, errors, model, ex);
-            return "record-update";
-        }
+        recordService.updateRecord(mapperUtil.getModelMapper().map(record, RecordDto.class), id);
+        return "redirect:/records/edit-record/" + id;
     }
 
     @GetMapping("/delete/{id}")

@@ -35,14 +35,14 @@ public class SickLeaveServiceImpl implements SickLeaveService {
     @Override
     @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR', 'ROLE_ADMIN')")
     public SickLeave updateSickLeave(SickLeaveDto SickLeaveDto, long id) {
-        SickLeave SickLeave = sickLeaveRepository.findByRecordId(id).orElseThrow(() -> new EntityNotFoundException(SickLeave.class, "record with", id));
-        if (SickLeave == null) {
-            SickLeave = new SickLeave();
+        SickLeave sickLeave = sickLeaveRepository.findByRecordId(id).orElseThrow(() -> new EntityNotFoundException(SickLeave.class, "record with", id));
+        if (sickLeave == null) {
+            sickLeave = new SickLeave();
         }
-        SickLeave.setLeaveDays(SickLeaveDto.getLeaveDays());
-        SickLeave.setStartDate(SickLeaveDto.getStartDate());
-        SickLeave.setRecord(SickLeaveDto.getRecord());
-        return sickLeaveRepository.save(SickLeave);
+        sickLeave.setLeaveDays(SickLeaveDto.getLeaveDays());
+        sickLeave.setStartDate(SickLeaveDto.getStartDate());
+        sickLeave.setRecord(SickLeaveDto.getRecord());
+        return sickLeaveRepository.save(sickLeave);
     }
 
 }
