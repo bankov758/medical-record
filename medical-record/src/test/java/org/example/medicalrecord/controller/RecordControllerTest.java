@@ -18,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -38,7 +37,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest
 @ContextConfiguration(classes = {RecordController.class, SecurityConfig.class})
-@Import(SecurityConfig.class)
 public class RecordControllerTest {
 
     @Autowired
@@ -303,6 +301,17 @@ public class RecordControllerTest {
         verify(recordService, times(1)).updateRecord(any(RecordDto.class), eq(id));
     }
 
+    @Test
+    @WithMockUser(authorities = {"ROLE_DOCTOR"})
+    void deleteRecordTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/records/delete/{id}", 1L)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/records"))
+                .andDo(print());
+
+        verify(recordService, times(1)).deleteRecord(anyLong());
+    }
 
     private RecordViewModel getValidMockRecordViewModel() {
         return RecordViewModel.builder()

@@ -44,6 +44,7 @@ public class RecordServiceImpl implements RecordService {
     private final AuthenticationService authenticationService;
 
     @Override
+    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR', 'ROLE_ADMIN', 'ROLE_PATIENT')")
     public List<RecordDto> getRecords() {
         UserDto loggedInUser = authenticationService.getLoggedInUser();
         if (loggedInUser.getAuthorities().contains(Roles.ROLE_DOCTOR.name()) || loggedInUser.getAuthorities().contains(Roles.ROLE_ADMIN.name())) {
@@ -53,11 +54,13 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
+    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR', 'ROLE_ADMIN', 'ROLE_PATIENT')")
     public RecordDto getRecord(long id) {
         return mapperUtil.getModelMapper().map(fetchRecord(id), RecordDto.class);
     }
 
     @Override
+    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR', 'ROLE_ADMIN', 'ROLE_PATIENT')")
     public List<RecordDto> filterRecords(Specification<Record> specification) {
         UserDto loggedInUser = authenticationService.getLoggedInUser();
         List<Record> result = recordRepository.findAll(specification);
@@ -68,10 +71,6 @@ public class RecordServiceImpl implements RecordService {
                 .filter(record -> record.getPatient().getId() == loggedInUser.getId())
                 .collect(Collectors.toList());
         return mapperUtil.mapList(result, RecordDto.class);
-    }
-
-    private Record fetchRecord(long id) {
-        return recordRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Record.class, "id", id));
     }
 
     @Override
@@ -111,6 +110,10 @@ public class RecordServiceImpl implements RecordService {
     @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR', 'ROLE_ADMIN')")
     public void deleteRecord(long id) {
         recordRepository.deleteById(id);
+    }
+
+    private Record fetchRecord(long id) {
+        return recordRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Record.class, "id", id));
     }
 
     private Doctor fetchDoctor(RecordDto recordDto) {

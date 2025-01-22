@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Set;
 
@@ -16,6 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@SuperBuilder
 public class Doctor extends User {
 
     @Column(name = "is_gp")

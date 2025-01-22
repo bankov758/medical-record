@@ -4,13 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Date;
 import java.util.Set;
 
 @JsonIdentityInfo(
@@ -19,10 +16,11 @@ import java.util.Set;
 )
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@SuperBuilder
 public class User extends BaseEntity implements UserDetails {
 
     @Column(nullable = false)
