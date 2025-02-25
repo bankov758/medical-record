@@ -52,7 +52,7 @@ public class DiagnoseServiceImpl implements DiagnoseService {
     @Override
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void deleteDiagnose(long id) {
-        diagnoseRepository.deleteById(id);
+//        diagnoseRepository.deleteById(id);
     }
 
     private Diagnose fetchDiagnose(long id) {
