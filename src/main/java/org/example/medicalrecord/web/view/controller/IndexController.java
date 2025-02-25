@@ -28,7 +28,7 @@ public class IndexController {
         model.addAttribute("doctors", mapperUtil.mapList(doctorService.getTopDoctors(), DoctorViewModel.class));
         model.addAttribute("diagnoses", mapperUtil.mapList(diagnoseService.getTopDiagnoses(), DiagnoseViewModel.class));
         model.addAttribute("sickMonthMsg", sickLeaveService.getMonthWithMostSickLeaves());
-        return "/index";
+        return "index";
     }
 
 }
