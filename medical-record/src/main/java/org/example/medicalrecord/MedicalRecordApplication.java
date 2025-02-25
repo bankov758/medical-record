@@ -20,6 +20,7 @@ public class MedicalRecordApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(MedicalRecordApplication.class, args);
+        //dasdasdad
     }
 
     @Bean
