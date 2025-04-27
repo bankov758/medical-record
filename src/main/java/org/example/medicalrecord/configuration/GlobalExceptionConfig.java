@@ -14,28 +14,28 @@ public class GlobalExceptionConfig {
     @ExceptionHandler(Exception.class)
     protected String handleException(Exception exception, Model model) {
         model.addAttribute("message", exception.getMessage());
-        return "/error";
+        return "error";
     }
 
     @ExceptionHandler({EntityNotFoundException.class})
     public String handleException(EntityNotFoundException exception, Model model) {
         model.addAttribute("message", exception.getMessage());
         model.addAttribute("status", HttpStatus.NOT_FOUND);
-        return "/error";
+        return "error";
     }
 
     @ExceptionHandler({DuplicateEntityException.class})
     public String handleException(DuplicateEntityException exception, Model model) {
         model.addAttribute("message", exception.getMessage());
         model.addAttribute("status", HttpStatus.CONFLICT);
-        return "/error";
+        return "error";
     }
 
     @ExceptionHandler({AuthorizationFailureException.class})
     public String handleException(AuthorizationFailureException exception, Model model) {
         model.addAttribute("message", exception.getMessage());
         model.addAttribute("status", HttpStatus.UNAUTHORIZED);
-        return "/error";
+        return "error";
     }
 
 }
